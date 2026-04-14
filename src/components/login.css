@@ -1,0 +1,216 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+
+.login_container {
+    display: block;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: clamp(300px, 700px, 90%);
+    height: clamp(300px, 500px, 90%);
+    border-radius: 50px;
+    padding: 1em 2em;
+    background: rgba(253, 253, 253, 0.136);
+    backdrop-filter: blur(8px);
+    border: 5px solid transparent;
+    background-clip: padding-box;
+    background-image: 
+        linear-gradient(rgba(1, 1, 19, 0.701), rgba(1, 1, 19, 0.701)),
+        linear-gradient(to bottom right, rgb(0, 242, 255), rgb(11, 2, 131));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+.register_container {
+    display: block;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: clamp(300px, 700px, 90%);
+    height: clamp(300px, 700px, 90%);
+    border-radius: 50px;
+    padding: 1em 2em;
+    background: rgba(253, 253, 253, 0.136);
+    backdrop-filter: blur(8px);
+    border: 5px solid transparent;
+    background-clip: padding-box;
+    background-image: 
+        linear-gradient(rgba(1, 1, 19, 0.701), rgba(1, 1, 19, 0.701)),
+        linear-gradient(to bottom right, rgb(0, 242, 255), rgb(11, 2, 131));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+.login_container h1,
+.register_container h1 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    top: 0;
+    width: 100%;
+    font-size: 3rem;
+    margin-top: 30px;
+    margin: 0;
+    color: transparent;
+    background-image: linear-gradient(to right,rgb(0, 242, 255), rgb(11, 2, 131));
+    background-clip: text;
+    z-index: 2;
+}
+
+.Login_from,
+.register_from {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px 10%;
+    align-items: center;
+}
+.Login_from label,
+.register_from label{
+   width: 100%;
+   font-size: 2rem;
+   color: transparent;
+   background-image: linear-gradient(to right, rgb(0, 242, 255), rgb(2, 75, 131));
+   background-clip: text;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.Login_from input,
+.register_from input {
+    width: 100%;
+    font-size: clamp(1.4rem, 6vw, 2.4rem);
+    padding: 4px 20px;
+    border-radius: 70px;
+    border: 3px solid rgb(2, 75, 131);
+    background-image: linear-gradient(to right, rgb(0, 242, 255), rgb(11, 2, 131));
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-overflow: ellipsis;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login_btns_div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 40px 10%;
+    margin-bottom: 10%;
+}
+
+@media (max-width: 800px) {
+    .login_btns_div {
+        padding: 40px 0;
+    }
+}
+
+.login_btns_div button {
+    position: relative;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 140px;
+    font-size: 1.8rem;
+    border-radius: 1000px;
+    background-color: transparent;
+    color: rgb(0, 242, 255);
+    border: 2px solid rgb(0, 242, 255);
+    transition: 0.3s;
+    transition: transform 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_btns_div button::after {
+    content: "";
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-image: linear-gradient(to bottom right, rgb(0, 242, 255), rgb(11, 2, 131));
+    border-radius: 1000px;
+    padding: 2px;
+    z-index: -1;
+    opacity: 0.4;
+    transition: opacity 0.3s;
+}
+
+.login_btns_div button:hover::after {
+    opacity: 1;
+}
+
+.login_btns_div button:hover {
+   transform: scale(1.05);
+   opacity: 1;
+   color: rgb(11, 2, 131);
+}
+
+
+/*-------------------------------------------------------------------*/
+
+
+.register_btn {
+    position: relative;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 190px;
+    font-size: 1.8rem;
+    border-radius: 1000px;
+    background-color: transparent;
+    color: rgb(0, 242, 255);
+    border: 2px solid rgb(0, 242, 255);
+    transition: 0.3s;
+    transition: transform 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
+.register_btn::after {
+    content: "";
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-image: linear-gradient(to bottom right,  rgb(0, 242, 255), rgb(11, 2, 131));
+    border-radius: 1000px;
+    z-index: -1;
+    opacity: 0.4;
+    transition: opacity 0.3s;
+}
+
+.register_btn::after:hover {
+   opacity: 1;
+}
+
+.register_btn:hover {
+    transform: scale(1.05);
+    opacity: 1;
+    color: rgb(11, 2, 131);
+}
+
+.x_btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 25px;
+    right: 25px;
+    font-weight: bold;
+    border: 2px solid rgb(0, 242, 255);
+    color: rgb(0, 242, 255);
+    background-color: transparent;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    transition: 0.3s;
+}
+
+.x_btn:hover {
+    background-color: rgb(11, 2, 131);
+}

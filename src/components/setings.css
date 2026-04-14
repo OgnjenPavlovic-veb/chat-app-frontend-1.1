@@ -1,0 +1,66 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+.setnigs_div {
+    background-color: var(--setings-background);
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.setnigs_div h1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    width: 100%;
+    color: white;
+    font-size: clamp(1rem, 4vw, 2rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;   
+}
+
+.modts_div {
+    width: 100%;
+    padding: 10px 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.modts_div h2 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    width: 100%;
+    color: white;
+    font-size: clamp(1rem, 4vw, 2rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modts_div button {
+    width: 200px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.3rem;
+    padding: 3px;
+    border-radius: 12px;
+}
+
+.setnigs_div p {
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin-top: 25px;
+    color: white;
+    font-size: clamp(1rem, 4vw, 2.1rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 2px 10%;
+}

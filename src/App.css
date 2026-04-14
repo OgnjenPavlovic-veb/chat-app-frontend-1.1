@@ -1,0 +1,602 @@
+
+* {
+  box-sizing: border-box;
+}
+
+
+body,
+nav,
+aside,
+footer,
+.friend_cart,
+button,
+input,
+.main_div {
+  transition: 
+    background-color 0.4s ease,
+    background 0.4s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+:root {
+  --body-background: rgb(1, 1, 19);
+  --nav-back: rgb(19, 9, 56);
+  --nav-border: rgb(135, 135, 255);
+  --nav-h1color1: rgb(0, 64, 255);
+  --nav-h1color2: rgb(6, 144, 165);
+  --nav-btnBack: rgb(19, 9, 56);
+  --nav-btnColor: rgb(35, 90, 255);
+  --nav-btnBorder: rgb(35, 90, 255);
+  --nav-btnHover: rgb(2, 1, 79);
+  --aside-back: rgb(2, 2, 52); 
+  --footer-back: rgba(2, 2, 52, 0.385);
+  --slider-pColor: rgb(0, 140, 255);
+  --slider-btnColorBorder: rgb(20, 147, 202);
+  --slider-btnHover: rgb(1, 1, 68);
+  --setings-background: rgb(16, 44, 83);
+
+  --main-background: rgba(56, 127, 164, 0.245);
+  --friends-linear1: rgb(33, 122, 178); 
+  --friends-linear2: rgb(3, 26, 62);
+  --main-color: white;
+  --avatar-border: rgb(0, 47, 255);
+  --cart-hoverColor: rgb(3, 200, 255);
+  --cart-hoverShadow: rgba(0, 102, 255, 0.79);
+  --chat-inputBoprder: rgb(5, 3, 37);
+  --chat-inputBack: rgba(8, 71, 154, 0.238);
+  --chat-btnBorder: rgb(5, 3, 37);
+  --chat-btnBack: rgba(8, 71, 154, 0.238);
+  --chat-btnHover: rgb(0, 76, 255);
+  --message-back: rgba(72, 0, 255, 0.316);
+  --preview-itemBack: blue;
+  --chat-usernameColor: rgb(0, 234, 255);
+
+  --acc-imageBorder: rgb(0, 68, 255);
+  --label-color:  rgb(5, 220, 244);
+  --acc-btnBack:  rgb(42, 72, 245);
+  --acc-btnHover: rgb(22, 37, 120);
+  --acc-linearInput1: rgb(17, 17, 182);
+  --acc-linearInput2: rgb(190, 240, 252);
+  --delete-accauntBack: rgb(3, 16, 56);
+  --delete-accauntBorder: rgb(0, 0, 23);
+
+  --request-cartBackW: rgb(79, 161, 255);
+  --request-colorW: rgb(4, 4, 45);
+  --request-btnBackW: rgb(2, 2, 21);
+  --request-btnHoverW: rgb(3, 3, 102);
+  --request-cartBack: rgb(2, 2, 26);
+
+  --createGroup-inputBack: rgb(15, 15, 89);
+  --groupItem-linear1: rgb(0, 102, 255);
+  --groupItem-linear2: rgb(13, 34, 126);
+  --groupItem-colorHover: rgb(3, 255, 251);
+  --groupItem-shadowHover: rgba(0, 102, 255, 0.79);
+  --groupItem-avatarColor: rgb(8, 18, 63);
+
+  --modal-listBack: rgb(30, 26, 147);
+  --button-back: rgb(33, 80, 209);
+  --button-color: white;
+  --modal-closeBtn: rgb(65, 83, 102);
+  --modal-btnHover: rgb(14, 33, 118);
+  --search-resultBack: rgba(140, 217, 255, 0.309);
+
+  --home-h1ColorLinear1: rgb(220, 227, 249);
+  --home-h1ColorLinear2: rgb(0, 95, 203);
+  --home-cartBack: rgb(33, 52, 102);
+  --home-cartBorder: rgb(0, 117, 128);
+}
+
+[data-theme="green"] {
+  --body-background: rgb(1, 19, 6);
+  --nav-back: rgb(9, 56, 29);
+  --nav-border: rgb(135, 255, 149);
+  --nav-h1color1: rgb(26, 255, 0);
+  --nav-h1color2: rgb(6, 165, 93);
+  --nav-btnBack: rgb(9, 56, 29);
+  --nav-btnColor: rgb(35, 255, 141);
+  --nav-btnBorder: rgb(35, 255, 141);
+  --nav-btnHover: rgb(0, 128, 28);
+  --aside-back: rgb(2, 52, 20); 
+  --footer-back: rgba(2, 52, 15, 0.385);
+  --slider-pColor: rgb(0, 255, 85);
+  --slider-btnColorBorder: rgb(20, 202, 47);
+  --slider-btnHover: rgb(1, 68, 22);
+  --setings-background: rgb(16, 83, 33);
+
+  --main-background: rgba(56, 164, 83, 0.245);
+  --friends-linear1: rgb(33, 178, 60); 
+  --friends-linear2: rgb(3, 62, 19);
+  --main-color: white;
+  --avatar-border: rgb(0, 255, 115);
+  --cart-hoverColor: rgb(3, 255, 79);
+  --cart-hoverShadow: rgba(0, 255, 34, 0.79);
+  --chat-inputBoprder: rgb(3, 37, 16);  
+  --chat-inputBack: rgba(8, 154, 45, 0.238);
+  --chat-btnBorder: rgb(3, 37, 15);
+  --chat-btnBack: rgba(8, 154, 30, 0.238);
+  --chat-btnHover: rgb(0, 255, 38);
+  --message-back: rgba(0, 255, 8, 0.316);    
+  --preview-itemBack: rgb(0, 255, 85);
+  --chat-usernameColor: rgb(38, 255, 0);
+
+  --acc-imageBorder: rgb(4, 255, 0);
+  --label-color:  rgb(5, 244, 73);
+  --acc-btnBack:  rgb(40, 147, 24);
+  --acc-btnHover: rgb(17, 90, 23);
+  --acc-linearInput1: rgb(12, 156, 19);
+  --acc-linearInput2: rgb(190, 252, 221);
+  --delete-accauntBack: rgb(3, 56, 13);
+  --delete-accauntBorder: rgb(0, 23, 3);
+
+  --request-cartBackW: rgb(79, 255, 105);
+  --request-colorW: rgb(4, 45, 11);
+  --request-btnBackW: rgb(3, 21, 2);
+  --request-btnHoverW: rgb(5, 102, 3);
+  --request-cartBack: rgb(2, 26, 10);
+
+  --createGroup-inputBack: rgb(15, 89, 16);
+  --groupItem-linear1: rgb(0, 255, 55);
+  --groupItem-linear2: rgb(14, 39, 7);
+  --groupItem-colorHover: rgb(8, 50, 27);
+  --groupItem-shadowHover: rgba(0, 255, 85, 0.79);
+  --groupItem-avatarColor: rgb(8, 63, 16);
+
+  --modal-listBack: rgb(26, 147, 26);
+  --button-back: rgb(33, 209, 59);
+  --button-color: black;
+  --modal-closeBtn: rgb(65, 102, 77);
+  --modal-btnHover: rgb(14, 118, 33);
+  --search-resultBack: rgba(140, 255, 220, 0.309);
+
+  --home-h1ColorLinear1: rgb(220, 227, 249);
+  --home-h1ColorLinear2: rgb(0, 203, 88);
+  --home-cartBack: rgb(33, 102, 47);
+  --home-cartBorder: rgb(3, 199, 111);
+}
+
+
+[data-theme="black"] {
+  --body-background: rgb(0, 0, 0);
+  --nav-back: rgb(18, 18, 18);
+  --nav-border: rgb(162, 162, 162);
+  --nav-h1color1: rgb(247, 247, 247);
+  --nav-h1color2: rgb(76, 76, 76);
+  --nav-btnBack: rgb(37, 37, 37);
+  --nav-btnColor: rgb(216, 216, 216);
+  --nav-btnBorder: rgb(216, 216, 216);
+  --nav-btnHover: rgb(88, 88, 88);
+  --aside-back: rgb(55, 55, 55); 
+  --footer-back: rgba(55, 55, 55, 0.385);
+  --slider-pColor: rgb(214, 214, 214);
+  --slider-btnColorBorder: rgb(169, 169, 169);
+  --slider-btnHover: rgb(32, 32, 32);
+  --setings-background: rgb(51, 50, 50);
+
+  --main-background: rgba(147, 147, 147, 0.245);
+  --friends-linear1: rgb(169, 169, 169); 
+  --friends-linear2: rgb(49, 49, 49);
+  --main-color: white;
+  --avatar-border: rgb(49, 49, 49);
+  --cart-hoverColor: rgb(209, 209, 209);
+  --cart-hoverShadow: rgba(143, 143, 143, 0.79);
+  --chat-inputBoprder: rgb(36, 36, 36);  
+  --chat-inputBack: rgba(144, 144, 144, 0.238);
+  --chat-btnBorder: rgb(3, 37, 15);
+  --chat-btnBack: rgba(147, 147, 147, 0.238);
+  --chat-btnHover: rgb(192, 192, 192);
+  --message-back: rgba(203, 203, 203, 0.316);    
+  --preview-itemBack: rgb(170, 170, 170);
+  --chat-usernameColor: rgb(23, 23, 23);
+
+  --acc-imageBorder: rgb(133, 133, 133);
+  --label-color:  rgb(158, 158, 158);
+  --acc-btnBack:  rgb(54, 54, 54);
+  --acc-btnHover: rgb(100, 100, 100);
+  --acc-linearInput1: rgb(39, 39, 39);
+  --acc-linearInput2: rgb(190, 190, 190);
+  --search-resultBack: rgba(127, 127, 127, 0.309);
+  --delete-accauntBack: rgb(63, 63, 63);
+  --delete-accauntBorder: rgb(19, 19, 19);
+
+  --request-cartBackW: rgb(175, 175, 175);
+  --request-colorW: rgb(39, 39, 39);
+  --request-btnBackW: rgb(3, 21, 2);
+  --request-btnHoverW: rgb(39, 39, 39);
+  --request-cartBack: rgb(16, 16, 16);
+
+  --createGroup-inputBack: rgb(87, 87, 87);
+  --groupItem-linear1: rgb(75, 75, 75);
+  --groupItem-linear2: rgb(41, 41, 41);
+  --groupItem-colorHover: rgb(27, 26, 26);
+  --groupItem-shadowHover: rgba(56, 56, 56, 0.79);
+  --groupItem-avatarColor: rgb(68, 68, 68);
+
+  --modal-listBack: rgb(93, 93, 93);
+  --button-back: rgb(27, 27, 27);
+  --button-color: white;
+  --modal-closeBtn: rgb(84, 83, 83);
+  --modal-btnHover: rgb(96, 96, 96);
+
+  --home-h1ColorLinear1: rgb(220, 227, 249);
+  --home-h1ColorLinear2: rgb(85, 85, 85);
+  --home-cartBack: rgb(55, 55, 55);
+  --home-cartBorder: rgb(130, 129, 129);
+}
+
+
+
+[data-theme="pink"] {
+  --body-background: rgb(0, 0, 0);
+  --nav-back: rgb(49, 28, 54);
+  --nav-border: rgb(202, 1, 206);
+  --nav-h1color1: rgb(255, 0, 251);
+  --nav-h1color2: rgb(109, 5, 114);
+  --nav-btnBack: rgb(49, 28, 54);
+  --nav-btnColor: rgb(196, 3, 255);
+  --nav-btnBorder: rgb(196, 3, 255);
+  --nav-btnHover: rgb(44, 1, 50);
+  --aside-back: rgb(75, 0, 121); 
+  --footer-back: rgba(75, 0, 121, 0.385);
+  --slider-pColor: rgb(238, 0, 255);
+  --slider-btnColorBorder: rgb(234, 1, 255);
+  --slider-btnHover: rgb(118, 2, 79);
+  --setings-background: rgb(42, 7, 59);
+
+  --main-background: rgb(47, 16, 63);
+  --friends-linear1: rgb(231, 4, 220); 
+  --friends-linear2: rgb(46, 3, 61);
+  --main-color: white;
+  --avatar-border: rgba(55, 1, 52, 0.177);
+  --cart-hoverColor: rgb(242, 3, 255);
+  --cart-hoverShadow: rgba(255, 0, 234, 0.79);
+  --chat-inputBoprder: rgb(32, 2, 40);  
+  --chat-inputBack: rgba(145, 0, 124, 0.238);
+  --chat-btnBorder: rgb(36, 3, 37);
+  --chat-btnBack: rgba(154, 2, 136, 0.238);
+  --chat-btnHover: rgb(162, 18, 157);
+  --message-back: rgba(194, 33, 165, 0.316);    
+  --preview-itemBack: rgb(57, 4, 64);
+  --chat-usernameColor: rgb(247, 0, 255);
+
+  --acc-imageBorder: rgb(137, 7, 173);
+  --label-color:  rgb(97, 6, 107);
+  --acc-btnBack:  rgb(81, 16, 73);
+  --acc-btnHover: rgb(181, 19, 138);
+  --acc-linearInput1: rgb(45, 0, 45);
+  --acc-linearInput2: rgb(226, 1, 189);
+  --search-resultBack: rgba(131, 0, 111, 0.309);
+  --delete-accauntBack: rgb(35, 3, 56);
+  --delete-accauntBorder: rgb(21, 0, 23);
+
+  --request-cartBackW: rgb(114, 2, 109);
+  --request-colorW: rgb(55, 0, 49);
+  --request-btnBackW: rgb(21, 2, 16);
+  --request-btnHoverW: rgb(79, 22, 76);
+  --request-cartBack: rgb(37, 5, 32);
+
+  --createGroup-inputBack: rgb(88, 25, 97);
+  --groupItem-linear1: rgb(93, 7, 104);
+  --groupItem-linear2: rgb(36, 0, 38);
+  --groupItem-colorHover: rgb(252, 88, 255);
+  --groupItem-shadowHover: rgba(69, 0, 75, 0.79);
+  --groupItem-avatarColor: rgb(62, 13, 63);
+
+  --modal-listBack: rgb(54, 4, 63);
+  --button-back: rgb(94, 15, 90);
+  --button-color: white;
+  --modal-closeBtn: rgb(68, 14, 73);
+  --modal-btnHover: rgb(181, 19, 138);
+
+  --home-h1ColorLinear1: rgb(243, 149, 243);
+  --home-h1ColorLinear2: rgb(68, 25, 74);
+  --home-cartBack: rgb(52, 10, 49);
+  --home-cartBorder: rgb(174, 8, 174);
+}
+
+
+[data-theme="red"] {
+  --body-background: rgb(0, 0, 0);
+  --nav-back: rgb(93, 11, 11);
+  --nav-border: rgb(231, 13, 13);
+  --nav-h1color1: rgb(250, 61, 61);
+  --nav-h1color2: rgb(241, 118, 118);
+  --nav-btnBack: rgb(93, 11, 11);
+  --nav-btnColor: rgb(246, 7, 7);
+  --nav-btnBorder: rgb(246, 7, 7);
+  --nav-btnHover: rgb(67, 6, 1);
+  --aside-back: rgb(70, 1, 1); 
+  --footer-back: rgba(70, 1, 1, 0.385);
+  --slider-pColor: rgb(255, 0, 0);
+  --slider-btnColorBorder: rgb(255, 0, 0);
+  --slider-btnHover: rgb(108, 0, 0);
+  --setings-background: rgb(54, 18, 18);
+
+  --main-background: rgba(59, 20, 20);
+  --friends-linear1: rgb(251, 118, 118); 
+  --friends-linear2: rgb(40, 0, 0);
+  --main-color: white;
+  --avatar-border: rgb(78, 0, 0);
+  --cart-hoverColor: rgb(255, 0, 0);
+  --cart-hoverShadow: rgba(255, 0, 0, 0.79);
+  --chat-inputBoprder: rgb(51, 0, 0);  
+  --chat-inputBack: rgba(65, 0, 0, 0.238);
+  --chat-btnBorder: rgb(51, 0, 0);
+  --chat-btnBack: rgba(147, 0, 0, 0.238);
+  --chat-btnHover: rgb(29, 0, 0);
+  --message-back: rgba(199, 0, 0, 0.316);    
+  --preview-itemBack: rgb(183, 79, 79);
+  --chat-usernameColor: rgb(255, 0, 0);
+
+  --acc-imageBorder: rgb(105, 0, 0);
+  --label-color:  rgb(255, 0, 0);
+  --acc-btnBack:  rgb(59, 0, 0);
+  --acc-btnHover: rgb(129, 0, 0);
+  --acc-linearInput1: rgb(41, 0, 0);
+  --acc-linearInput2: rgb(214, 0, 0);
+  --search-resultBack: rgba(143, 0, 0, 0.309);
+  --delete-accauntBack: rgb(109, 5, 5);
+  --delete-accauntBorder: rgb(23, 0, 0);
+
+  --request-cartBackW: rgb(181, 0, 0);
+  --request-colorW: rgb(45, 0, 0);
+  --request-btnBackW: rgb(21, 2, 2);
+  --request-btnHoverW: rgb(147, 61, 61);
+  --request-cartBack: rgb(31, 0, 0);
+
+  --createGroup-inputBack: rgb(94, 0, 0);
+  --groupItem-linear1: rgb(255, 52, 52);
+  --groupItem-linear2: rgb(74, 2, 2);
+  --groupItem-colorHover: rgb(60, 0, 0);
+  --groupItem-shadowHover: rgba(255, 0, 0, 0.79);
+  --groupItem-avatarColor: rgb(65, 0, 0);
+
+  --modal-listBack: rgb(152, 2, 2);
+  --button-back: rgb(117, 15, 15);
+  --button-color: white;
+  --modal-closeBtn: rgb(85, 2, 2);
+  --modal-btnHover: rgb(255, 0, 0);
+
+  --home-h1ColorLinear1: rgb(249, 220, 220);
+  --home-h1ColorLinear2: rgb(91, 0, 0);
+  --home-cartBack: rgb(56, 1, 1);
+  --home-cartBorder: rgb(131, 4, 4);
+}
+
+
+
+body {
+  background-color: var(--body-background);
+  margin: 0;
+  padding: 0;
+}
+
+.loading {
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin: auto;
+  inset: 0;
+  position: absolute;
+  z-index: 2000;
+}
+
+.authenticated-layout {
+  display: contents;
+}
+
+.app_wrapper {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 20% 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+  "navbar navbar"
+  "sidebar main"
+  "sidebar footer";
+}
+
+
+nav {
+  top: 0;
+  position: sticky;
+  width: 100%;
+  height: 100px;
+  background-color: var(--nav-back);
+  grid-area: navbar;
+  box-sizing: border-box;
+  display: flex;
+  padding: 0 5%;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--nav-border);
+}
+
+nav h1 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: transparent;
+  background-image: linear-gradient(to bottom right, var(--nav-h1color1), var(--nav-h1color2));
+  background-clip: text;
+  font-size: clamp(1rem, 4vw, 2rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+nav button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(0.8rem, 2vw, 1.5rem);
+  padding: clamp(2px,1vw,6px) clamp(6px,2vw,12px);
+  max-width: 170px;
+  border-radius: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--nav-btnBack);
+  color: var(--nav-btnColor);
+  box-sizing: border-box;
+  border: 2px solid var(--nav-btnBorder);
+  transition: 0.3s;
+  opacity: 0.9;
+}
+
+nav button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  background-color: var(--nav-btnHover);
+}
+
+main {
+  grid-area: main;
+  top: 100px;
+  width: 100%;
+  color: white;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+aside {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--aside-back);
+  grid-area: sidebar;
+}
+
+footer {
+  width: 100%;
+  height: 200px;
+  background-color: var(--footer-back);
+  grid-area: footer;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.22);
+}
+
+.main_div {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  padding: 0 20%;
+  min-height: 0;
+}
+
+@media (max-width: 800px) {
+  .app_wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+
+    grid-template-areas:
+      "navbar"
+      "main"
+      "footer";
+  }
+
+  aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 60%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  aside.open {
+    transform: translateX(0);
+  }
+
+  .main_div {
+    padding: 0 2%;
+  }
+
+  .show {
+    display: block;
+  }
+
+  footer {
+    height: 5px;
+  }
+}
+
+@media (min-width:800px){
+  .show{
+    display:none;
+  }
+}
+
+@media (max-width:1250px){
+  .main_div {
+      padding: 0 2%;
+    }
+}
+
+
+
+/*-----------------------------------------------------------------------*/
+
+.slider_div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px 15%;
+  justify-items: center;
+  gap: 45px;
+}
+
+.slider_div p {
+  width: 100%;
+  text-align: center;
+  color: var(--slider-pColor);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.slider_div button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  width: clamp(150px, 70%, 400px);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  padding: clamp(2px,1vw,6px) clamp(6px,2vw,12px);
+  border-radius: 1000px;
+  color: var(--slider-btnColorBorder);
+  background-color: transparent;
+  border: 2px solid var(--slider-btnColorBorder);
+  transition: 0.3s;
+}
+
+
+.slider_div button:hover {
+  background-color: var(--slider-btnHover);
+}
+
+.sider_btns_wrap {
+  width: 100%;
+  display: grid;
+  gap: 20px;
+  justify-items: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.sider_btns_wrap a,
+.slider_div a {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+
+/*-----------------------------------------------------------------------*/
+

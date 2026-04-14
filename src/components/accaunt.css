@@ -1,0 +1,578 @@
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+
+.accaunt_div {
+  width: 100%;  
+  background-color: var(--main-background);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.accaunt_div h1 {
+    width: 100%;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: clamp(1.3rem, 7vw, 2.1rem);
+}
+
+.accaunt_div h2 {
+    width: 100%;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: clamp(1rem, 7vw, 1.7rem);
+}
+
+.acc_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.accaunt_image_div_setings {
+  width: 250px;
+  height: 250px;
+  border-radius: 20px;
+  border: 3px solid var(--acc-imageBorder);
+  box-sizing: border-box;
+  overflow: hidden;
+  background-image: url("/default-avatar.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.accaunt_image_div_setings img {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  object-fit: cover;
+}
+
+.accaunt_from1 {
+  display: grid;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.accaunt_from1 label {
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(0.7rem, 7vw, 1.1rem);
+  margin: 4px;
+  transition: 0.3s;
+}
+
+.accaunt_from1 label:hover {
+  color: var(--label-color);
+}
+
+.accaunt_from1 button {
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(0.9rem, 5vw, 1.4rem);
+  background-color: var(--acc-btnBack);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 1000px;
+  transition: 0.3s;
+}
+
+.accaunt_from1 button:hover,
+.accaunt_btns button:hover {
+  background-color: var(--acc-btnHover);
+}
+
+.accaunt_from2 {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px max(2%, 20%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.accaunt_from2 input {
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(0.85rem, 6vw, 1.3rem);
+  padding: 3px 3%;
+  border-radius: 1000px;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  color: white;
+  background-image: linear-gradient(to bottom right, var(--acc-linearInput1), var(--acc-linearInput2));
+  border: none;
+}
+
+.accaunt_from2 label {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1rem, 6vw, 1.7rem);
+}
+
+.accaunt_btns {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.accaunt_btns button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1.07rem, 3vw, 1.5rem);
+  padding: clamp(2px,1vw,6px) clamp(6px,2vw,12px);
+  padding: 3px 25px;
+  border: none;
+  border-radius: 1000px;
+  background-color: var(--acc-btnBack);
+  color: white;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.window_delete_div {
+  position: fixed;
+  margin: auto;
+  inset: 0;
+  height: min-content;   
+  max-height: 90vh;         
+  width: clamp(300px, 700px, 90%);
+  padding: 20px;         
+  background-color: var(--delete-accauntBack);
+  border-radius: 25px;
+  border: 7px solid var(--delete-accauntBorder);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+.window_delete_div p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  font-size: clamp(1.2rem, 7vw, 2.1rem);
+}
+
+.overlay2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(46, 46, 46, 0.6);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.delete_btns_div {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.window_delete {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+
+
+
+/*---------------------------------------------------------------------
+-----------------------------------------------------------------------
+---------------------------------------------------------------------*/
+
+.profile_view {
+  background-color: var(--main-background);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3%;
+  gap: 20px;
+}
+
+.profile_view_btn {
+  width: 100px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1.1rem, 5vw, 1.5rem);
+  border-radius: 10px;
+}
+
+.firend_request_cart {
+  background-color: var(--request-cartBackW);
+  height: min-content;
+  width: 350px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 3%;
+  border-radius: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--request-colorW);
+}
+
+.firend_request_cart button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1rem, 5vw, 1.2rem);
+  padding: 3px 5%;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--request-btnBackW);
+  color: white;
+  transition: 0.3s;
+}
+
+.firend_request_cart button:hover {
+  background-color: var(--request-btnHoverW);
+}
+
+.request_avatar {
+  width: 340px;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/*---------------------------------------------------------
+------------------------------------------------------
+----------------------------------------------------------*/
+
+.groups_div {
+  background-color: var(--main-background);
+  min-height: 0;
+  width: 100%;
+  gap: 20px;
+  align-items: center;
+  padding: 30px 12%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gropu_b_create {
+  width: 100%;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1.2rem, 5vw, 1.9rem);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.gropu_b_create:hover {
+    color: var(--acc-btnHover);
+}
+
+.create_group_container {
+  width: 100%;
+  display: block;
+  height: 160px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: 
+        max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+        opacity 0.4s ease, 
+        transform 0.4s ease;
+}
+
+.create_group_container.open {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.create_group_container h2 {
+  width: 100%;
+  text-align: center;
+  margin: 3px;
+  font-size: clamp(1rem, 5vw, 1.5rem);
+}
+
+.create_div {
+  display: grid;
+  grid-template-rows: 80px 40px;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 0 20%;
+}
+
+.create_div input {
+  width: 100%;
+  margin-top: 5px;
+  border: none;
+  background-color: var(--createGroup-inputBack);
+  color: white;
+  padding: 3px 3%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  border-radius: 22px;
+}
+
+.create_div label {
+  margin: 0;
+}
+
+.create_div2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2px 4%;
+}
+
+.grups_list {
+  width: 100%;
+  align-items: center;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 30px 3%;
+  gap: 20px;
+}
+
+.gropus_p {
+  width: 100%;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1rem, 5vw, 1.7rem);
+  margin: 0;
+}
+
+.group_item {
+  width: 100%;
+  height: 60px;
+  background-image: linear-gradient(to bottom right, var(--groupItem-linear1), var(--groupItem-linear2));
+  display: flex;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  padding: 4%;
+  align-items: center;
+  gap: 20px;
+  transition: 0.3s;
+  min-height: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.group_item p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1.1rem, 7vw, 1.8rem);
+}
+
+
+
+.group_item:hover {
+   color: var(--groupItem-colorHover);
+   box-shadow: 0 0 15px var(--groupItem-shadowHover);
+}
+
+.group_avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--groupItem-avatarColor);
+}
+
+.group_link {
+  color: inherit;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.group_info_div, 
+.warning_window {
+  position: fixed;
+  margin: auto;
+  inset: 0;
+  height: min-content;   
+  max-height: 90vh;         
+  width: clamp(300px, 700px, 90%);
+  padding: 20px;         
+  background-color: var(--delete-accauntBack);
+  border-radius: 25px;
+  border: 7px solid var(--delete-accauntBorder);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+.warning_window p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(1.2rem, 5vw, 2rem);
+  margin: 0;
+}
+
+.warning_window_btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10%;
+}
+
+.warning_window_btns button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100px;
+  font-size: clamp(0.82rem, 5vw, 1.2rem);
+}
+
+.group_info_leave {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.group_info_div p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: left;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  margin: 0;
+}
+
+
+.group_info_div button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.friend_gropu_item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 5%;
+}
+
+.info_cart {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*---------------------------------------------------
+---------------------------------------------------
+--------------------------------------------------*/
+
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.add_baner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 2px 10%;
+}
+
+.add_baner h2 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  text-align: center;
+}
+
+.modal_content_list {
+  background: var(--modal-listBack);
+  padding: 20px;
+  border-radius: 8px;
+  width: min(650px, 90%);
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.friend_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 2px 10%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.friend_avatar_small {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.friend_item span {
+  flex: 1;
+}
+
+button {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: none;
+  background-color: var(--button-back);
+  color: var(--button-color);
+  border-radius: 4px;
+  transition: 0.3s;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modal_close {
+  background-color: var(--modal-closeBtn);
+  transition: 0.3s;
+}
+
+.modal_close:hover, 
+button:hover {
+  background-color: var(--modal-btnHover);
+}
