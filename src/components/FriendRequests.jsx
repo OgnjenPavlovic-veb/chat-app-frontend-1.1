@@ -1,17 +1,17 @@
 import { acceptFriendRequest, rejectFriendRequest } from "../services/friendService";
 
-function FriendRequest ({ requests, removeRequest, user }) {
-    const imageUrlAcc = "http://localhost:5000/uploads";
+function FriendRequest ({ requests, removeRequest }) {
+    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
 
     const handleAccept = async (id) => {
       const res = await acceptFriendRequest(id);
-      alert(res.message);
+      console.log(res.message);
       removeRequest(id);
     }
 
     const handleReject = async (id) => {
       const res = await rejectFriendRequest(id);
-      alert(res.message);
+      console.log(res.message);
       removeRequest(id);
     }
 
@@ -27,8 +27,9 @@ function FriendRequest ({ requests, removeRequest, user }) {
                 <div key={req._id} className="request_cart">
                     <div className="request_cart_image_username">   
                    <img 
-                    src={user.profile?.image ? `${imageUrlAcc}/${user.profile.image}` : "/default-avatar.png"}
+                    src={req.sender?.profile?.image ? `${UPLOAD_URL}/${req.sender.profile.image}` : "/default-avatar.png"}
                     className="request_image"
+                    onError={(e) => (e.target.src = "/default-avatar.png")}
                     />   
                 
                     <p>{req.sender.username}</p>

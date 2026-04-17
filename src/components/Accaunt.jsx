@@ -1,10 +1,10 @@
 import "./accaunt.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../services/api.js";
 
 
 function Accaunt ({ user, setUser }) {
-    const API = "http://localhost:5000/api";
     const navigate = useNavigate();
     const [username, setUsername] = useState(user.username);
     const [oldPassword, setOldPassword] = useState("");
@@ -12,37 +12,26 @@ function Accaunt ({ user, setUser }) {
     const [image, setImage] = useState(null);
     const [openWindow, setOpenWindow] = useState(false);
 
+    const IMAGE_BASE_URL = import.meta.env.VITE_UPLOAD_URL;;
+
     const handleUpdate = async (e) => {
         e.preventDefault();
-
-        const token = localStorage.getItem("token");
-
-        const res = await fetch(`${API}/accaunt/update`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify({
+       try {  
+        const res = await API.put(`/accaunt/update`, {
                 username,
                 oldPassword,
                 newPassword
-            })
         });
 
-        const data = await res.json();
-
-        if (res.ok) {
-            setUser(data);
+            setUser(res.data);
             alert("Accaunt updated.");
-        } else {
-            alert(data.message);
-        }
+        
+      } catch (err) {
+        alert(err.response?.data?.message || "Error updating account");
+      }
     }
 
     const handleImage = async () => {
-        const token = localStorage.getItem("token");
-
         console.log("SELECTED IMAGE:", image);
 
         if (!image) {
@@ -50,45 +39,24 @@ function Accaunt ({ user, setUser }) {
             return;
         }
  
-
         const formData = new FormData();
         formData.append("image", image);
+      try {
+        const res = await API.put(`/accaunt/profile-image`, formData);
 
-        const res = await fetch(`${API}/accaunt/profile-image`, {
-            method: "PUT",
-            headers: {
-                Authorization: "Bearer " + token
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
             setUser(prev => ({
                 ...prev, 
-                profile: {
-                    ...prev.profile,
-                    image: data.image
-                }
+                profile: { ...prev.profile, image: res.data.image }
             }))
+       alert("Image uploaded!");
+        } catch (err) {
+            alert(err.response?.data?.message || "Error uploading image");
         }
     }
 
     const handleDelete = async () => {
-       
-        const token = localStorage.getItem("token");
-
-        const res = await fetch(`${API}/accaunt/deleteAcc`, {
-            method: "DELETE",
-            headers: {
-                Authorization: "Bearer " + token
-            }
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
+       try {
+            await API.delete(`/accaunt/deleteAcc`);
             alert("Account deleted");
 
             localStorage.removeItem("token");
@@ -96,9 +64,10 @@ function Accaunt ({ user, setUser }) {
 
             navigate("/");
             window.location.reload();
-        } else {
-            alert(data.message);
-        }
+
+      } catch (err) {
+        alert(err.response?.data?.message || "Error deleting account");
+      }
     }
 
 
@@ -114,7 +83,7 @@ function Accaunt ({ user, setUser }) {
          <div className="accaunt_image_div_setings">
             {user.profile?.image && (
             <img 
-            src={`http://localhost:5000/uploads/${user.profile.image}`}
+            src={`${IMAGE_BASE_URL}/${user.profile.image}`}
             alt="profile"
             />
             )}

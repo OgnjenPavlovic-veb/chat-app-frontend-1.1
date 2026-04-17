@@ -4,8 +4,6 @@ import "./setings.css";
 
 function Setings ({ changeTheme }) {
     
-    
-    
 
     return (
         <>

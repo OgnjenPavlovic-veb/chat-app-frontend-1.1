@@ -1,12 +1,12 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./login.css";
+import API from "../services/api.js";
 
 
 function Login ({ onLogin }) {
-    const API = "http://localhost:5000/api";
-
-    const [showRegister, setShoeRegister] = useState("");
+   
+    const [showRegister, setShowRegister] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(null);
     
     const [emailOrUsername, setEmailOrUsername] = useState("");
@@ -19,48 +19,36 @@ function Login ({ onLogin }) {
     const [regPasswordConfirm, setRegPasswordConfirm] = useState("");
 
 
-    const handleRegister = async () => {
+    const handleRegister = async (e) => {
+        if (e) e.preventDefault();
         
         if (!regUsername || !regEmail || !regPassword || !regPasswordConfirm) {
-            return console.log("Sva polja su obavezna.");
+            return console.log("All fields are required..");
         }
 
         if (regPassword !== regPasswordConfirm) {
-           return console.log("Lozinke se ne poklapaju.");
+           return console.log("Passwords do not match.");
         }
     
      try {
 
-        const res = await fetch(`${API}/auth/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: regUsername,
-                email: regEmail,
-                password: regPassword,
-                passwordConfirm: regPasswordConfirm
-            })
+         await API.post(`/auth/register`, {
+            username: regUsername,
+            email: regEmail,
+            password: regPassword,
+            passwordConfirm: regPasswordConfirm
         });
-
-         const data = await res.json();
-
-        if (!res.ok) {
-            console.log("Error u register logici", data);
-            setError(data.message || "data error");
-            return;
-        }
 
         setRegUsername("");
         setRegEmail("");
         setRegPassword("");
         setRegPasswordConfirm("");
-        setShoeRegister(false);
-        console.log("register passed.");
+        setShowRegister(false);
+        setError("");
+        alert("Registration successful! You can now log in.");
 
      } catch (err) {
-        console.error(err);
+        setError(err.response?.data?.message || "Registration error.");
      }
 
     }
@@ -69,36 +57,24 @@ function Login ({ onLogin }) {
 
 const handleLogin = async () => {
     if (!emailOrUsername || !password) {
-       return console.log("Sva polja su obavezna");
+        setError("All fields are required.");
+        return;
     }
 
     try {
-        const res = await fetch(`${API}/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailOrUsername,
-                password
-            })
+        const res = await API.post(`/auth/login`, {
+            emailOrUsername,
+            password
         });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            console.log("Error u login logici.");
-            setError(data.message || "error-login");
-            return;
-        }
+        const data = res.data;
 
         if (!data.token) {
-        setError("Login failed - no token");
-        return;
-        }
+         setError("Login failed - no token");
+         return;
+       }
 
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("userId", data.user._id || data.user.id);
         setEmailOrUsername("");
         setPassword("");
         setError("")
@@ -106,43 +82,16 @@ const handleLogin = async () => {
 
 
         if (onLogin) {
-            onLogin(data);
+            onLogin(res.data);
         }
 
     } catch (err) {
         console.log(err);
-        setError("Login failded.");
+        setError(err.response?.data?.message || "Incorrect email or password..");
     }
 }
 
 //-------------------------------------------------------------
-
-useEffect(() => {
-    const checkUser = async () => {
-        const token = localStorage.getItem("token");
-
-        if (!token) return;
-
-        try {
-             const res = await fetch(`${API}/auth/me`, {
-                headers: { Authorization: `Bearer ${token}`}
-             });
-
-             if (!res.ok) {
-                localStorage.removeItem("token");
-                return;
-             }
-
-             setIsLoggedIn(true);
-             const data = await res.json();
-             console.log("User", data);
-
-        } catch (err) {
-            console.error(err);
-        }
-    }
-    checkUser();
-}, []);
 
     return (
         <>
@@ -171,7 +120,7 @@ useEffect(() => {
                             <button type="submit">Login</button>
                             <button 
                             type="button"
-                            onClick={() => {setShoeRegister(true); setError("")}}
+                            onClick={() => {setShowRegister(true); setError("")}}
                             >Register</button>
                         </div>
                     </form>
@@ -180,9 +129,9 @@ useEffect(() => {
 
             {showRegister && (<div className="register_container">
   
-                <button type="button" className="x_btn" onClick={() => {setShoeRegister(false); setError("")}}>X</button>
+                <button type="button" className="x_btn" onClick={() => {setShowRegister(false); setError("")}}>X</button>
                 <h1>Register</h1>
-                {error && <p style={{ color: "reg", textAlign: "center"}}>{error}</p>}
+                {error && <p style={{ color: "red", textAlign: "center"}}>{error}</p>}
                 <form className="register_from" onSubmit={(e) => {e.preventDefault(); handleRegister();}}>
 
                   <label>Username

@@ -1,9 +1,10 @@
 import { sendFriendRequest } from "../services/friendService.js";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import API from "../services/api.js";
 
 function FriendProfile () {
-  const imageUrlAcc = "http://localhost:5000/uploads";
+  const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
   const [profile, setProfile] = useState(null);
   const [sent, setSent] = useState(false);
   const { id } = useParams();
@@ -12,25 +13,15 @@ function FriendProfile () {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:5000/api/users/${id}`, {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
-        });
-        if (!res.ok) {
-        console.error("User not found");
-        setProfile(null);
-        return;
-        }
-        const data = await res.json();
-        setProfile(data);
+        const res = await API.get(`/users/${id}`);
+        setProfile(res.data);
       } catch (err) {
         console.error(err);
+        setProfile(null);
       }
     };
 
-    loadUser();
+    if (id) loadUser();
   }, [id]);
 
   const handleAddFriend = async () => {
@@ -40,11 +31,12 @@ function FriendProfile () {
       const res = await sendFriendRequest(profile._id);
       if (res) {
         setSent(true);
+        alert(res.message || "Request sent!");
       }
-      alert(res.message);
-
+      
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.message || "Error sending request");
     }
   };
   
@@ -55,19 +47,20 @@ function FriendProfile () {
     return (
         <>
         <div className="profile_view">
-          <button className="profile_view_btn" onClick={() => navigate('/')}>← Back</button>
+          <button className="profile_view_btn" onClick={() => navigate(-1)}>← Back</button>
       
           <div className="firend_request_cart">
           
              <img 
-             src={profile?.profile?.image ? `${imageUrlAcc}/${profile.profile.image}` : "/default-avatar.png"}
+             src={profile?.profile?.image ? `${UPLOAD_URL}/${profile.profile.image}` : "/default-avatar.png"}
              alt="avatar"
+             onError={(e) => (e.target.src = "/default-avatar.png")}
              className="request_avatar"
              />
 
             <h2>{profile.username}</h2>
         
-            <button onClick={handleAddFriend}>Add Friend</button>
+            <button onClick={handleAddFriend} disabled={sent}>{sent ? "Request Sent" : "Add Friend"}</button>
             </div>
           
         

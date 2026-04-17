@@ -1,7 +1,7 @@
 
 
 function MessageBubble ({ message, user }) {
-    const imageUrlAcc = "http://localhost:5000/uploads";
+    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
 
     const senderId = typeof message.sender === "object"
             ? message.sender._id
@@ -20,7 +20,7 @@ function MessageBubble ({ message, user }) {
              <div className={`chat_user_info ${isMine ? "mine" : "theirs"}`}>
             {!isMine && (
                 <img 
-                src={message.sender?.profile?.image ?`${imageUrlAcc}/${message.sender.profile.image}` : "/default-avatar.png"}
+                src={message.sender?.profile?.image ?`${UPLOAD_URL}/${message.sender.profile.image}` : "/default-avatar.png"}
                 alt="avatar"
                 onError={(e) => (e.target.src = "/default-avatar.png")}
                 className="message_avatar"
@@ -33,7 +33,7 @@ function MessageBubble ({ message, user }) {
             {message.text && <p>{message.text}</p>}
 
             {message.images?.map((img, i) => (
-                <img key={i} src={img} alt="chat-img" className="chat_image"/>
+                <img key={i} src={`${UPLOAD_URL}/${img}`} alt="chat-img" className="chat_image"/>
             ))}
 
             {isMine && 

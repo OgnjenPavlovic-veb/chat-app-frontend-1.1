@@ -1,94 +1,60 @@
 
-const API = "http://localhost:5000/api";
+import API from "./api.js";
 
 export const sendFriendRequest = async (receiverId) => {
-    const token = localStorage.getItem("token");
+    
 
     try {
-        const res = await fetch(`${API}/friends/request`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ receiverId })
-        });
-
-        const data = await res.json();
-
-        return data;
+        const res = await API.post(`/friends/request`, { receiverId });
+        return res.data;
 
     } catch (err) {
-        console.error(err);
+        console.error("Error sending friend request:", err);
+        throw err;
     }
 }
 
 export const getFriendRequests = async () => {
-    const token = localStorage.getItem("token");
-    if (!token || token === "undefined") return [];
+    
     try {
-        const res = await fetch(`${API}/friends/request`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        return res.json();
+        const res = await API.get(`/friends/request`);
+        return res.data;
 
     } catch (err) {
-        console.error(err);
+        console.error("Error fetching friend requests:", err);
+        return [];
     }
 }
 
 export const acceptFriendRequest = async (requestId) => {
-    const token = localStorage.getItem("token");
-
     try {
-        const res = await fetch(`${API}/friends/accept`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ requestId })
-        });
-
-      return res.json();
+        const res = await API.post(`/friends/accept`,{ requestId });
+        return res.data;
 
     } catch (err) {
-        console.error(err);
+        console.error("Error accepting friend request:", err);
+        throw err;
     }
 }
 
 export const rejectFriendRequest = async (requestId) => {
-    const token = localStorage.getItem("token");
-
     try {
-        const res = await fetch(`${API}/friends/reject`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ requestId })
-        });
-
-        return res.json();
+        const res = await API.post(`/friends/reject`, { requestId });
+        return res.data;
 
     } catch (err) {
-        console.error(err);
+        console.error("Error rejecting friend request:", err);
+        throw err;
     }
 }
 
 
 export const getFriends = async () => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`${API}/friends/list`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    return res.json();
+   try {
+    const res = await API.get(`/friends/list`);
+    return res.data;
+   } catch (err) {
+    console.error("Error fetching friends list:", err);
+    return [];
+   } 
 }

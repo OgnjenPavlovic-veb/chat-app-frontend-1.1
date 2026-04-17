@@ -1,75 +1,49 @@
 
-const API = "http://localhost:5000/api";
+import API from "./api.js";
 
 
 export const accessChat = async (userId) => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`${API}/chat`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ userId })
-    });
-
-    return res.json();
+    
+    const res = await API.post(`/chat`, { userId })
+ 
+    return res.data;
 }
-
+//-----------------------------------------------------
 export const getMessages = async (chatId) => {
-    const token = localStorage.getItem("token");
 
-    const res = await fetch(`${API}/message/${chatId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    return res.json();
+    const res = await API.get(`/message/${chatId}`);
+    return res.data;
 }
-
+//-----------------------------------------------------
 export const sendMessage = async ({ chatId, text, images }) => {
-    const token = localStorage.getItem("token");
-
+    
     const formData = new FormData();
 
        formData.append("chatId", chatId);
        formData.append("text", text);
 
-       for (let i = 0; i < images.length; i++) {
-        formData.append("images", images[i]);
-       }
+       if (images && images.length > 0) {
+        for (let i = 0; i < images.length; i++) {
+            formData.append("images", images[i]);
+        }
+    }
 
-    const res = await fetch(`${API}/message`, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
-        body: formData
-    });
+    const res = await API.post(`/message`, formData);
 
-    return res.json();
+    return res.data;
 }
 
 //------------------------------------------------------
 
 
 export const createGroup = async ({ name, image }) => {
-    const token = localStorage.getItem("token");
-
+    
     const formData = new FormData();
 
     formData.append("name", name);
     formData.append("image", image);
 
-    const res = await fetch(`${API}/chat/group`, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
-        body: formData
-    });
+    const res = await API.post(`/chat/group`, formData);
 
-    return res.json()
+    return res.data;
 }

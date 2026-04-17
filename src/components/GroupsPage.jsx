@@ -1,17 +1,34 @@
 import { useState, useEffect, useRef } from "react";
 import { createGroup } from "../services/chatService.js";
 import { Link } from "react-router-dom";
+import API from "../services/api.js";
 
 
 function GroupsPage () {
-    const API = "http://localhost:5000/api";
+    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
     const [name, setName] = useState("");
     const [image, setImage] = useState(null);
     const [groups, setGroups] = useState([]);
     const [create, setCreate] = useState(false);
     const fileInputRef = useRef();
     
-    const handleFileClick = () => {
+   const loadGroups = async () => {
+        try {
+        const res = await API.get(`/chat`);
+        const onlyGroups = res.data.filter(c => c.isGroup);
+
+        setGroups(onlyGroups);
+        } catch (err) {
+            console.error("Failed to load chats", err);
+        }
+        
+    };
+
+    useEffect(() => {
+      loadGroups();
+     }, []);
+
+     const handleFileClick = () => {
          fileInputRef.current.click();
     }
 
@@ -23,45 +40,22 @@ function GroupsPage () {
 
     const handleCreate = async () => {
         if (!name) return alert("The group must have a name.");
+      try {  
        const res = await createGroup({ name, image });
        console.log(res);
        
-       if (res._id) {
+       if (res && res._id) {
         alert("Group Created");
+        setName("");
+        setImage(null);
+        setCreate(false);
         loadGroups(); 
-       } else {
+       } 
+      } catch (err) {
+        console.error("Error creating group:", err);
         alert("Error creating group.");
-       }
-
+      } 
     }
-
-
-   const loadGroups = async () => {
-        const token = localStorage.getItem("token");
-
-        const res = await fetch(`${API}/chat`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        if (!res.ok) {
-            console.error("Failed to load chats");
-            return;
-        }
-
-        const data = await res.json();
-        const onlyGroups = data.filter(c => c.isGroup);
-
-        setGroups(onlyGroups);
-        }
-
-
-         useEffect(() => {
-          loadGroups();
-         }, []);
-   
-
 
     return (
         <>
@@ -110,9 +104,10 @@ function GroupsPage () {
                 <div className="group_item" >
                   
                     <img 
-                    src={group.groupImage || "/default-avatar.png"}
+                    src={group.groupImage ? `${UPLOAD_URL}/${group.groupImage}` : "/default-avatar.png"}
                     alt="avatar"
                     className="group_avatar"
+                    onError={(e) => (e.target.src = "/default-avatar.png")}
                     />
 
                     <p>{group.name}</p>

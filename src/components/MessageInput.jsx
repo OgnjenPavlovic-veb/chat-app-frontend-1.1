@@ -12,20 +12,22 @@ function MessageInput ({ chatId, addMessage }) {
     const handleSend = async () => {
 
        if(!text.trim() && images.length === 0) return;
-
+      try {
         const message = await sendMessage({
             chatId,
             text,
             images
         });
-
     
         addMessage(message);
         socket.emit("new message", message);
 
         setText("");
         setImages([])
-
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      } catch (err) {
+        console.error("Failed to send message:", err);
+      }
     }
 
     const handleTyping = async (e) => {

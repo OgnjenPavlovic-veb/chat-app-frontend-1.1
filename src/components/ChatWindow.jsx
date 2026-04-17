@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getMessages } from "../services/chatService";
 import MessageBubble from "./MessageBubble";
 import MessageInput from "./MessageInput";
 import { socket } from "../socket";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getFriends } from "../services/friendService";
-
+import API from "../services/api.js";
 
 
 function ChatWindow ({ user }) {
-  const imageUrlAcc = "http://localhost:5000/uploads";
-  const API = "http://localhost:5000/api";
+  const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
@@ -21,24 +20,16 @@ function ChatWindow ({ user }) {
   const [groupInfo, setGroupInfo] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const messageEndRef = useRef(null);
 
   useEffect(() => {
   const initChat = async () => {
     if (!chat && id) {
       try {
-        const token = localStorage.getItem("token");
-
-        const res = await fetch(`${API}/chat/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        const data = await res.json();
-        setChat(data);
-
+        const res = await API.get(`/chat/${id}`);
+        setChat(res.data);
       } catch (err) {
-        console.error(err);
+        console.error("Chat init error:", err);
       }
     }
   };
@@ -55,7 +46,11 @@ function ChatWindow ({ user }) {
       chatId: chat._id,
       userId: user._id
     });
-  }, [chat]);
+
+    return () => {
+      socket.emit("leave chat", chat._id);
+    };
+  }, [chat?._id, user._id]);
 
   useEffect(() => {
     if (!chat?._id) return;
@@ -67,131 +62,64 @@ function ChatWindow ({ user }) {
     };
 
     loadMessage();
-  }, [chat]);
 
-  useEffect(() => {
-    socket.on("message received", (newMessage) => {
-      setMessages(prev => [...prev, newMessage]);
+    const handleNewMessage = (newMessage) => {
+      if (newMessage.chat._id === chat._id || newMessage.chat === chat._id) {
+        setMessages((prev) => [...prev, newMessage]);
+      }
+    }
 
-      socket.emit("message received", {
-        messageId: newMessage._id,
-        userId: user._id
-      });
-    });
-
-    return () => socket.off("message received");
-  }, []);
-
-  useEffect(() => {
+    socket.on("message received", handleNewMessage);
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
 
+    socket.on("messages seen", ({ userId }) => {
+      setMessages(prev => prev.map(msg => ({
+        ...msg,
+        seenBy: [...new Set([...(msg.seenBy || []), userId])]
+      })));
+    });
+
     return () => {
+      socket.off("message received", handleNewMessage);
       socket.off("typing");
       socket.off("stop typing");
+      socket.off("messages seen");
     };
-  }, []);
+
+  }, [chat?._id]);
+
 
   useEffect(() => {
-    socket.on("messages seen", ({ userId }) => {
-      setMessages(prev =>
-        prev.map(msg => ({
-          ...msg,
-          seenBy: [...(msg.seenBy || []), userId]
-        }))
-      );
-    });
-
-    return () => socket.off("messages seen");
-  }, []);
-
-  useEffect(() => {
-    const el = document.querySelector(".message_div");
-    if (el) el.scrollTop = el.scrollHeight;
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+ 
 
   const addUser = async (userId) => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`${API}/chat/group/add`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-         Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        chatId: chat._id,
-        userId
-      })
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("Add user error:", text);
-      return;
-    }
-
-    const data = await res.json();
-
-    setChat(data);
+    try {
+    const res = await API.put(`/chat/group/add`, 
+      { chatId: chat._id, userId });
+       setChat(res.data);
+    } catch (err) {
+      console.error("Add user error", err)
+    }   
   }
 
   const removeUser = async (userId) => {
-    const token = localStorage.getItem("token");
-
-      const res = await fetch(`${API}/chat/group/remove`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          chatId: chat._id,
-          userId
-        })
-      });
-
-      let data;
-
-      try {
-        data = await res.json();
-      } catch {
-        const text = await res.text();
-        console.error("NOT JSON:", text);
-      }
-
-      if (res.ok) {
-        setChat(data);
-      } else {
-        console.error(data);
-        return;
-      }
-    
-  }
+    try {
+      const res = await API.put(`/chat/group/remove`, 
+        { chatId: chat._id, userId });
+        setChat(res.data);
+    } catch (err) {
+      console.error("Remove user error", err);
+    }    
+ }
 
   const handleLeave = async () => {
-    const token = localStorage.getItem("token");
-
     try {
-      const res = await fetch(`${API}/chat/group/leave`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          chatId: chat._id
-        })
-      });
-
-      if (res.ok) {
+        await API.put(`/chat/group/leave`, { chatId: chat._id });
         socket.emit("leave chat", chat._id);
         navigate("/groups");
-      } else {
-        const errData = await res.json();
-        console.log(errData.message || "Error leaving group.");
-      }
-
     } catch (err) {
       console.error("Leave error", err);
     }
@@ -232,6 +160,10 @@ useEffect(() => {
   return () => socket.off("removed from group");
 }, [chat]);
 
+useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [messages, isTyping]);
+
 
   if (!user) return <div>Loading user...</div>;
   if (!chat?._id) return <div>Loading chat...</div>;
@@ -252,22 +184,15 @@ console.log(chat);
         <div className="chat_baner">
           <div className="chat_baner_1">
          <button onClick={() => navigate(isGroup ? "/groups" : "/friends")}>← Back</button>
-{/*
-         <img 
-         src={friend?.profile?.image ? `${imageUrlAcc}/${friend.profile.image}` : "/default-avatar.png"}
-         alt="avatar"
-         className="chat_avatar"
-         />
-*/}
+
          <img 
             src={
               isGroup
-                ? chat.groupImage || "/default-avatar.png"
-                : friend?.profile?.image
-                  ? `${imageUrlAcc}/${friend.profile.image}`
-                  : "/default-avatar.png"
+                ? (chat.groupImage ? `${UPLOAD_URL}/${chat.groupImage}` : "/default-avatar.png")
+                : (friend?.profile?.image ? `${UPLOAD_URL}/${friend.profile.image}` : "/default-avatar.png")
             }
             className="chat_avatar"
+            onError={(e) => (e.target.src = "/default-avatar.png")}
           />
           
 
@@ -299,11 +224,11 @@ console.log(chat);
             <div key={f._id} className="friend_item">
 
               <img 
-              src={f.profile?.image ? `${imageUrlAcc}/${f.profile.image}` : "/default-avatar.png"}
+              src={f.profile?.image ? `${UPLOAD_URL}/${f.profile.image}` : "/default-avatar.png"}
               alt="avatar"
               className="friend_avatar_small"
               />
-
+              
               <span>{f.username}</span>
               
               <button onClick={() => addUser(f._id)}>Add</button>
@@ -329,7 +254,7 @@ console.log(chat);
               <div key={member} className="friend_gropu_item">
                 <div className="info_cart">
              <img 
-              src={member.profile?.image ? `${imageUrlAcc}/${member.profile.image}` : "/default-avatar.png"}
+              src={member.profile?.image ? `${UPLOAD_URL}/${member.profile.image}` : "/default-avatar.png"}
               alt="avatar"
               className="friend_avatar_small"
               />
@@ -363,6 +288,7 @@ console.log(chat);
         {Array.isArray(messages) && messages.map(m => (
             <MessageBubble key={m._id} message={m} user={user}/>
         ))}
+        <div ref={messageEndRef} />
     </div>
 
     

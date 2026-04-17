@@ -13,16 +13,15 @@ import Accaunt from './components/Accaunt';
 import GroupsPage from './components/GroupsPage';
 import HomePage from './components/HimePage';
 import Setings from './components/setings';
+import API from "./services/api.js";
 
 
 function App() {
-  const API = "http://localhost:5000/api";
-
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
- //  const [searchQuery, setSearchQuery] = useState("");
- //  const [searchResults, setSearchResults] = useState([]);
+ 
   const [requests, setRequests] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [authReady, setAuthReady] = useState(false);
@@ -40,25 +39,17 @@ function App() {
         }
 
       try {
-        const res = await fetch(`${API}/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await API.get(`/auth/me`);
+        const userData = res.data;
 
-        if (!res.ok) {
-          localStorage.removeItem("token");
-          setIsLoggedIn(false);
-          setAuthReady(true);
-          return;
-        }
-
-        const data = await res.json();
-
-        setUser(data);
+        setUser(userData);
         setIsLoggedIn(true);
-        const userTheme = data.theme || "default";
+        const userTheme = userData.theme || "default";
         document.documentElement.setAttribute("data-theme", userTheme);
+        socket.connect();
       } catch (err) {
-        console.error(err);
+        console.error("Auth check failed:", err);
+        localStorage.removeItem("token");
         setIsLoggedIn(false);
       } finally {
         setAuthReady(true);
@@ -69,57 +60,15 @@ function App() {
   }, []);
 
 
-
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     setUser(null);
     setIsLoggedIn(false);
 
     setTheme("default");
     document.documentElement.setAttribute("data-theme", "default");
   }
-
-  /*
-  useEffect(() => {
-  if (!user?._id) return;
-
-  if (!socket.connected) {
-    socket.connect();
-  }
-
-  socket.emit("setup", user._id);
-}, [user])
-*/
-
-
-/*
-  const handleSearch = async (value) => {
-      setSearchQuery(value);
-
-      if (value.length < 2) {
-        setSearchResults([]);
-        return;
-      }
-
-      try {
-        const token = localStorage.getItem("token");
-
-        const res = await fetch(`${API}/users/search?query=${value}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        const data = await res.json();
-
-        setSearchResults(data);
-
-      } catch (err) {
-        console.error(err);
-      }
-  }
-*/
-
 
 useEffect(() => {
     const handler = (users) => setOnlineUsers(users);
@@ -128,7 +77,7 @@ useEffect(() => {
     return () => socket.off("online users", handler);
   }, []);
 
-  useEffect(() => {  // ovaj mora da ostane jer ako ga nema uvek pokazuje online user i ako user nije online
+  useEffect(() => { 
   if (user?._id) {
     socket.emit("setup", user._id)
   }
@@ -138,63 +87,31 @@ useEffect(() => {
 }, [user?._id]);
 
   useEffect(() => {
-    const loadRequests = async () => {
-      try {
-        const data = await getFriendRequests();
-
-        setRequests(data || []);
-
-      } catch (err) {
-        console.error(err);
+    if (isLoggedIn && user) {
+      const loadRequests = async () => {
+        try {
+          const data = await getFriendRequests();
+          setRequests(data || []);
+        } catch (err) {
+          console.error("Error loading requests:", err);
+        }
       }
+      loadRequests();
     }
-    loadRequests();
-  }, []);
-
-  
-/*
-useEffect(() => {
-  socket.on("online users", (users) => {
-    setOnlineUsers(users)
-  })
-  return () => socket.off("online users");
-}, []);
-*/
-
-/*
-useEffect(() => {
-  const handleOnlineUsers = (users) => {
-    setOnlineUsers(users);
-  };
-
-  socket.on("online users", handleOnlineUsers);
-
-  return () => {
-    socket.off("online users", handleOnlineUsers);
-  };
-}, []);
-*/
-
+  }, [isLoggedIn, user]);
 
     const changeTheme = async (newTheme) => {
-      
+      try {
        setUser(prev => ({ ...prev, theme: newTheme }));
        setTheme(newTheme);
-
         document.documentElement.setAttribute("data-theme", newTheme);
-
-        const token = localStorage.getItem("token");
-
-         await fetch(`${API}/users/theme`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ theme: newTheme })
-        });
-    }
-
+        
+        await API.put(`/users/theme`, { theme: newTheme });
+    } catch (err) {
+      console.error("Error saving theme:", err);
+    }   
+   }
+//---------------------------------
 
     const removeRequest = async (id) => {
     setRequests(prev => prev.filter(r => r._id !== id))
@@ -221,7 +138,8 @@ useEffect(() => {
           console.log("Podaci sa logina:", userData, "Tema:", userTheme);
           document.documentElement.setAttribute("data-theme", userTheme); 
           setTheme(userTheme);
-          setUser({ ...userData, theme: userTheme }); // Spajamo temu i usera u jedan state
+          setUser({ ...userData, theme: userTheme });
+          socket.connect();
           setIsLoggedIn(true);
 
           setTimeout(() => {
@@ -237,7 +155,7 @@ useEffect(() => {
         <div className="authenticated-layout" key={user._id}>
         <nav>
           <button className='show' onClick={() => setIsOpen(!isOpen)}>Meni</button>
-          <h1><a>JoJoWhats-app</a></h1>
+          <h1><a>FastChat</a></h1>
           <button onClick={handleLogOut}>Sing out</button>
         </nav>
        
@@ -246,45 +164,27 @@ useEffect(() => {
         <aside className={isOpen ? "sidebar open" : "sidebar"}>
           <div className="slider_div">
               <p>{user?.username}</p>
-           {/*   
-              <input 
-              type='text'
-              placeholder='Search...'
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              />
-              <div className="search_result">
-                {searchResults.map((u) => (
-                  <div className="search_user" key={u._id}>
-                    <p>{u.username}</p>
-                    <Link to={`/profile/${u._id}`}>
-                    <button className='search_btn'>Add Friend</button>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-        */}
-
+           
             <div className="sider_btns_wrap">
            <Link to={"/"}>
-             <button>Home</button>        
+             <button onClick={() => setIsOpen(false)}>Home</button>        
             </Link>
-            <Link to={"/accaunt"}>
-             <button>Accaunt</button>
+            <Link to="/accaunt">
+             <button onClick={() => setIsOpen(false)}>Accaunt</button>
             </Link>
             <Link to={"/friends"}>
-            <button>Friends</button>
+            <button onClick={() => setIsOpen(false)}>Friends</button>
             </Link> 
             <Link to={"/groups"}>
-            <button>Grups</button>
+            <button onClick={() => setIsOpen(false)}>Grups</button>
             </Link> 
             <Link to={"/requests"}>
-             <button>Requests</button>
+             <button onClick={() => setIsOpen(false)}>Requests</button>
             </Link>    
             </div>
 
            <Link to={"/setings"}>
-             <button>Setings</button>
+             <button onClick={() => setIsOpen(false)}>Setings</button>
             </Link>  
            
             
@@ -305,7 +205,7 @@ useEffect(() => {
           <Route path='/accaunt' element={<Accaunt user={user} setUser={setUser}/>}/>
           <Route path='/profile/:id' element={<FriendProfile/>}/>
           <Route path='/requests'
-           element={<FriendRequest requests={requests} removeRequest={removeRequest} user={user}/>}
+           element={<FriendRequest requests={requests} removeRequest={removeRequest}/>}
            />
           
            <Route path="/chat/:id" element={<ChatWindow key={user?._id} user={user}/>}/>

@@ -3,10 +3,10 @@ import { getFriends } from "../services/friendService";
 import { accessChat } from "../services/chatService";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../socket";
+import API from "../services/api.js";
 
 function FriendsList ({ onlineUsers }) {
-    const API = "http://localhost:5000/api";
-    const imageUrlAcc = "http://localhost:5000/uploads";
+    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
     const [selectedFriend, setSelectedFriend] = useState(null);
@@ -33,24 +33,16 @@ const openChat = async (friend) => {
 }
 
 const removeFriend = async (friendId) => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`${API}/friends/remove-friend`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token 
-        },
-        body: JSON.stringify({ friendId })
-    });
-
-    const data = await res.json();
+   try {
+    const res = await API.put(`/friends/remove-friend`, { friendId });
 
     if (res.ok) {
         setFriends(prev => prev.filter(f => f._id !== friendId ));
-    } else {
-        alert(data.message);
-    }
+    } 
+   } catch (err) {
+     console.error("Remove friend error:", err);
+     alert(err.response?.data?.message || "Error removing friend")
+ }
 }
 
 useEffect(() => {
@@ -72,9 +64,10 @@ useEffect(() => {
                 <div className="friend_cart" key={friend._id} onClick={() => openChat(friend)}>
                     <div className="firend_cart_2">
                     <img 
-                    src={friend.profile?.image ? `${imageUrlAcc}/${friend.profile.image}` : "/default-avatar.png"}
+                    src={friend.profile?.image ? `${UPLOAD_URL}/${friend.profile.image}` : "/default-avatar.png"}
                     alt="avatar"
                     className="friend_avatar"
+                    onError={(e) => (e.target.src = "/default-avatar.png")}
                     />
                    
                     {onlineUsers.includes(friend._id) && (
