@@ -7,7 +7,7 @@ import API from "../services/api.js";
 
 
 function HomePage () {
-    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
+    
     const [users, setUsers] = useState([])
     const [sentRequests, setSentRequests] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -92,7 +92,7 @@ function HomePage () {
                   <div className="search_user" key={u._id}>
 
                     <img 
-                    src={u.profile?.image ? `${UPLOAD_URL}/${u.profile.image}` : "/default-avatar.png"}
+                    src={u.profile?.image || "/default-avatar.png"}
                     alt={u.username}
                     onError={(e) => (e.target.src = "/default-avatar.png")}
                     />
@@ -119,7 +119,7 @@ function HomePage () {
                 <div key={u._id} className="recommended_card">
 
                     <img 
-                    src={u.profile?.image ? `${UPLOAD_URL}/${u.profile.image}` : "/default-avatar.png"}
+                    src={u.profile?.image || "/default-avatar.png"}
                     alt={u.username}
                     onError={(e) => (e.target.src = "/default-avatar.png")}
                     />

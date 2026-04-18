@@ -12,7 +12,6 @@ function Accaunt ({ user, setUser }) {
     const [image, setImage] = useState(null);
     const [openWindow, setOpenWindow] = useState(false);
 
-    const IMAGE_BASE_URL = import.meta.env.VITE_UPLOAD_URL;;
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -33,7 +32,7 @@ function Accaunt ({ user, setUser }) {
 
     const handleImage = async () => {
         console.log("SELECTED IMAGE:", image);
-
+    
         if (!image) {
             alert("No image selected");
             return;
@@ -83,7 +82,7 @@ function Accaunt ({ user, setUser }) {
          <div className="accaunt_image_div_setings">
             {user.profile?.image && (
             <img 
-            src={`${IMAGE_BASE_URL}/${user.profile.image}`}
+            src={user.profile.image}
             alt="profile"
             />
             )}

@@ -5,7 +5,7 @@ import API from "../services/api.js";
 
 
 function GroupsPage () {
-    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
+    
     const [name, setName] = useState("");
     const [image, setImage] = useState(null);
     const [groups, setGroups] = useState([]);
@@ -104,7 +104,7 @@ function GroupsPage () {
                 <div className="group_item" >
                   
                     <img 
-                    src={group.groupImage ? `${UPLOAD_URL}/${group.groupImage}` : "/default-avatar.png"}
+                    src={group.groupImage || "/default-avatar.png"}
                     alt="avatar"
                     className="group_avatar"
                     onError={(e) => (e.target.src = "/default-avatar.png")}

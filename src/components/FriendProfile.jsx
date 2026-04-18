@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import API from "../services/api.js";
 
 function FriendProfile () {
-  const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
   const [profile, setProfile] = useState(null);
   const [sent, setSent] = useState(false);
   const { id } = useParams();
@@ -52,7 +51,7 @@ function FriendProfile () {
           <div className="firend_request_cart">
           
              <img 
-             src={profile?.profile?.image ? `${UPLOAD_URL}/${profile.profile.image}` : "/default-avatar.png"}
+             src={profile?.profile?.image || "/default-avatar.png"}
              alt="avatar"
              onError={(e) => (e.target.src = "/default-avatar.png")}
              className="request_avatar"

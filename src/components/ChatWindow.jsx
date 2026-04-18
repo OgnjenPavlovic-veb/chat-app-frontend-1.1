@@ -9,7 +9,6 @@ import API from "../services/api.js";
 
 
 function ChatWindow ({ user }) {
-  const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
@@ -186,11 +185,7 @@ console.log(chat);
          <button onClick={() => navigate(isGroup ? "/groups" : "/friends")}>← Back</button>
 
          <img 
-            src={
-              isGroup
-                ? (chat.groupImage ? `${UPLOAD_URL}/${chat.groupImage}` : "/default-avatar.png")
-                : (friend?.profile?.image ? `${UPLOAD_URL}/${friend.profile.image}` : "/default-avatar.png")
-            }
+            src={isGroup ? (chat.groupImage || "/default-avatar.png") : (friend?.profile?.image || "/default-avatar.png")}
             className="chat_avatar"
             onError={(e) => (e.target.src = "/default-avatar.png")}
           />
@@ -224,7 +219,7 @@ console.log(chat);
             <div key={f._id} className="friend_item">
 
               <img 
-              src={f.profile?.image ? `${UPLOAD_URL}/${f.profile.image}` : "/default-avatar.png"}
+              src={f.profile?.image || "/default-avatar.png"}
               alt="avatar"
               className="friend_avatar_small"
               />
@@ -254,7 +249,7 @@ console.log(chat);
               <div key={member} className="friend_gropu_item">
                 <div className="info_cart">
              <img 
-              src={member.profile?.image ? `${UPLOAD_URL}/${member.profile.image}` : "/default-avatar.png"}
+              src={member.profile?.image || "/default-avatar.png"}
               alt="avatar"
               className="friend_avatar_small"
               />

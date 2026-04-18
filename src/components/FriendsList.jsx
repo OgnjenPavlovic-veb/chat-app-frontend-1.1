@@ -6,7 +6,7 @@ import { socket } from "../socket";
 import API from "../services/api.js";
 
 function FriendsList ({ onlineUsers }) {
-    const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
+    
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
     const [selectedFriend, setSelectedFriend] = useState(null);
@@ -64,7 +64,7 @@ useEffect(() => {
                 <div className="friend_cart" key={friend._id} onClick={() => openChat(friend)}>
                     <div className="firend_cart_2">
                     <img 
-                    src={friend.profile?.image ? `${UPLOAD_URL}/${friend.profile.image}` : "/default-avatar.png"}
+                    src={friend.profile?.image || "/default-avatar.png"}
                     alt="avatar"
                     className="friend_avatar"
                     onError={(e) => (e.target.src = "/default-avatar.png")}
