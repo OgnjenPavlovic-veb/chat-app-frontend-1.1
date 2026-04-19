@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { getMessages } from "../services/chatService";
 import MessageBubble from "./MessageBubble";
 import MessageInput from "./MessageInput";
-import { socket } from "../socket";
+import { socket } from "../socket.js";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getFriends } from "../services/friendService";
 import API from "../services/api.js";
@@ -20,6 +20,12 @@ function ChatWindow ({ user }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const messageEndRef = useRef(null);
+  
+  const chatRef = useRef(chat);
+
+  useEffect(() => {
+    chatRef.current = chat;
+  }, [chat]);
 
   useEffect(() => {
   const initChat = async () => {
@@ -39,17 +45,26 @@ function ChatWindow ({ user }) {
   useEffect(() => {
     if (!chat?._id) return;
 
-    socket.emit("join chat", chat._id);
+        const join = () => {
+        socket.emit("join chat", chat._id);
 
-    socket.emit("messages seen", {
-      chatId: chat._id,
-      userId: user._id
-    });
+        socket.emit("messages seen", {
+          chatId: chat._id,
+          userId: user._id,
+        });
+      };
 
-    return () => {
-      socket.emit("leave chat", chat._id);
-    };
-  }, [chat?._id, user._id]);
+      if (socket.connected) {
+        join();
+      } else {
+        socket.on("connect", join);
+      }
+
+      return () => {
+        socket.emit("leave chat", chat._id);
+        socket.off("connect", join);
+      };
+  }, [chat?._id, user?._id]);
 
   useEffect(() => {
     if (!chat?._id) return;
@@ -62,14 +77,28 @@ function ChatWindow ({ user }) {
 
     loadMessage();
 
+
     const handleNewMessage = (newMessage) => {
-      if (newMessage.chat._id === chat._id || newMessage.chat === chat._id) {
-        setMessages((prev) => [...prev, newMessage]);
-      }
-    }
+      const incomingChatId = typeof newMessage.chat === 'object' 
+          ? newMessage.chat._id 
+          : newMessage.chat;
+      
+    
+       if (incomingChatId === chatRef.current?._id) {
+          setMessages((prev) => {
+          
+            const exists = prev.some(m => m._id === newMessage._id);
+            if (exists) return prev;
+
+            return [...prev, newMessage];
+          });
+        }
+
+    };
 
     socket.on("message received", handleNewMessage);
-    socket.on("typing", () => setIsTyping(true));
+    socket.on("typing", () => {
+      setIsTyping(true)});
     socket.on("stop typing", () => setIsTyping(false));
 
     socket.on("messages seen", ({ userId }) => {

@@ -8,12 +8,12 @@ import { getFriendRequests } from './services/friendService';
 import FriendRequest from './components/FriendRequests';
 import FriendsList from "./components/FriendsList";
 import ChatWindow from './components/ChatWindow';
-import { socket } from './socket';
 import Accaunt from './components/Accaunt';
 import GroupsPage from './components/GroupsPage';
 import HomePage from './components/HimePage';
 import Setings from './components/setings';
 import API from "./services/api.js";
+import { socket, connectSocket } from './socket.js';
 
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
         setIsLoggedIn(true);
         const userTheme = userData.theme || "default";
         document.documentElement.setAttribute("data-theme", userTheme);
-        socket.connect();
+        connectSocket(user._id);
       } catch (err) {
         console.error("Auth check failed:", err);
         localStorage.removeItem("token");
@@ -70,6 +70,33 @@ function App() {
     document.documentElement.setAttribute("data-theme", "default");
   }
 
+
+  useEffect(() => {
+    if (user?._id) {
+        socket.auth = { userId: user._id };
+        connectSocket(user._id);
+        
+        if (!socket.connected) {
+            console.log("Pokušavam konekciju...");
+            socket.connect();
+        } else {
+            
+            socket.emit("setup", user._id);
+        }
+    }
+    
+    
+    socket.on("connect", () => console.log("Socket spojen ID:", socket.id));
+    socket.on("connect_error", (err) => console.error("Socket greška:", err));
+
+    return () => {
+        socket.off("connect");
+        socket.off("connect_error");
+    };
+}, [user?._id]);
+
+
+
 useEffect(() => {
     const handler = (users) => setOnlineUsers(users);
 
@@ -77,14 +104,6 @@ useEffect(() => {
     return () => socket.off("online users", handler);
   }, []);
 
-  useEffect(() => { 
-  if (user?._id) {
-    socket.emit("setup", user._id)
-  }
-  return () => {
-    socket.off("online users");
-  };
-}, [user?._id]);
 
   useEffect(() => {
     if (isLoggedIn && user) {

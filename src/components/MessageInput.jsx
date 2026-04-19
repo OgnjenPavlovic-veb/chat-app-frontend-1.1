@@ -20,7 +20,10 @@ function MessageInput ({ chatId, addMessage }) {
         });
     
         addMessage(message);
-        socket.emit("new message", message);
+        socket.emit("new message", {
+            ...message,
+            chat: typeof message.chat === 'object' ? message.chat._id : message.chat
+        });
 
         setText("");
         setImages([])
