@@ -12,14 +12,14 @@ export const socket = io(SOCKET_URL, {
     transports: ["websocket"],
     withCredentials: true 
 });
-
+/*
 export const connectSocket = (userId) => {
   if (!socket.connected) {
     socket.connect();
-
-    socket.on("connect", () => {
+  } else {
       console.log("Socket connected:", socket.id);
       socket.emit("setup", userId);
-    });
   }
 };
+
+*/

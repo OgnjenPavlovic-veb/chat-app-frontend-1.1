@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Login from './components/login';
 import FriendProfile from "./components/FriendProfile";
+import { socket } from './socket.js';
 import './App.css';
 import "./components/main.css";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
@@ -13,7 +14,7 @@ import GroupsPage from './components/GroupsPage';
 import HomePage from './components/HimePage';
 import Setings from './components/setings';
 import API from "./services/api.js";
-import { socket, connectSocket } from './socket.js';
+
 
 
 function App() {
@@ -46,7 +47,7 @@ function App() {
         setIsLoggedIn(true);
         const userTheme = userData.theme || "default";
         document.documentElement.setAttribute("data-theme", userTheme);
-        connectSocket(user._id);
+       
       } catch (err) {
         console.error("Auth check failed:", err);
         localStorage.removeItem("token");
@@ -65,34 +66,39 @@ function App() {
     localStorage.removeItem("userId");
     setUser(null);
     setIsLoggedIn(false);
+    socket.disconnect();
 
     setTheme("default");
     document.documentElement.setAttribute("data-theme", "default");
   }
 
+useEffect(() => {
+  if (!user?._id) return;
+   const setup = () => {
+    socket.emit("setup", user._id);
+  };
 
-  useEffect(() => {
-    if (user?._id) {
-        socket.auth = { userId: user._id };
-        connectSocket(user._id);
-        
-        if (!socket.connected) {
-            console.log("Pokušavam konekciju...");
-            socket.connect();
-        } else {
-            
-            socket.emit("setup", user._id);
-        }
-    }
-    
-    
-    socket.on("connect", () => console.log("Socket spojen ID:", socket.id));
-    socket.on("connect_error", (err) => console.error("Socket greška:", err));
+  if (!socket.connected) socket.connect();
 
-    return () => {
-        socket.off("connect");
-        socket.off("connect_error");
-    };
+  socket.on("connect", setup);
+
+ 
+  socket.on("friend request:new", (data) => {
+  console.log("Realtime request:", data);
+  
+  if (!data) return;
+  
+  setRequests(prev => {
+    if (prev.find(r => r._id === data._id)) return prev;
+    return [...prev, data];
+  });
+});
+
+  return () => {
+    socket.off("connect", setup);
+    socket.off("friend request:new");
+  };
+
 }, [user?._id]);
 
 
@@ -158,7 +164,7 @@ useEffect(() => {
           document.documentElement.setAttribute("data-theme", userTheme); 
           setTheme(userTheme);
           setUser({ ...userData, theme: userTheme });
-          socket.connect();
+        //  socket.connect();
           setIsLoggedIn(true);
 
           setTimeout(() => {
@@ -171,7 +177,7 @@ useEffect(() => {
       {isLoggedIn && user && (
         <>
     
-        <div className="authenticated-layout" key={user._id}>
+        <div className="authenticated-layout">
         <nav>
           <button className='show' onClick={() => setIsOpen(!isOpen)}>Meni</button>
           <h1><a>FastChat</a></h1>

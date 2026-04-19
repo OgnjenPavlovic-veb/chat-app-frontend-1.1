@@ -36,7 +36,7 @@ const removeFriend = async (friendId) => {
    try {
     const res = await API.put(`/friends/remove-friend`, { friendId });
 
-    if (res.ok) {
+    if (res.status === 200) {
         setFriends(prev => prev.filter(f => f._id !== friendId ));
     } 
    } catch (err) {
