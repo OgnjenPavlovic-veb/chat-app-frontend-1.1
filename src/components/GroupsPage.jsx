@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createGroup } from "../services/chatService.js";
 import { Link } from "react-router-dom";
 import API from "../services/api.js";
+import { socket } from "../socket.js";
 
 
 function GroupsPage () {
@@ -15,18 +16,28 @@ function GroupsPage () {
    const loadGroups = async () => {
         try {
         const res = await API.get(`/chat`);
+        
         const onlyGroups = res.data.filter(c => c.isGroup);
 
-        setGroups(onlyGroups);
+        setGroups([...onlyGroups]);
         } catch (err) {
             console.error("Failed to load chats", err);
         }
         
     };
 
+    loadGroups();
+
     useEffect(() => {
-      loadGroups();
+     const handler = () => {
+            loadGroups();
+        };
+
+        socket.on("group list changed", handler);
+         
+        return () => socket.off("group list changed", handler);
      }, []);
+
 
      const handleFileClick = () => {
          fileInputRef.current.click();
@@ -56,6 +67,7 @@ function GroupsPage () {
         alert("Error creating group.");
       } 
     }
+    
 
     return (
         <>

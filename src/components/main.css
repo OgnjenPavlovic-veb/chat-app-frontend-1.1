@@ -169,9 +169,10 @@
 .chat_content_div {
     flex: 1;
     display: flex;
+    min-height: 0;
     flex-direction: column;
     padding: 0 15% 4%;
-    min-height: 0;
+    overflow: hidden;
 }
 
 .message_input {
@@ -239,15 +240,14 @@
 .message_div {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    overflow-y: auto;
-    min-height: 0;
     flex: 1;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
     scrollbar-width: none;
-    -ms-overflow-style: none;
 }
 
-.message_div::-webkit-scrollbar {
+.message_div div::-webkit-scrollbar {
     display: none;
 }
 
@@ -260,6 +260,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: clamp(1rem, 4vw, 1.35rem);
     padding: 5px 20px;
+    width: fit-content;
 }
 
 .message_bubble p {
@@ -270,13 +271,13 @@
 
 
 .message_bubble.mine {
-  align-self: flex-end;
+  margin-left: auto;
   text-align: right;
 }
 
 
 .message_bubble.theirs {
-  align-self: flex-start;
+  margin-right: auto;
   text-align: left;
 }
 

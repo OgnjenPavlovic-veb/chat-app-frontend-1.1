@@ -6,6 +6,7 @@ import { socket } from "../socket.js";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getFriends } from "../services/friendService";
 import API from "../services/api.js";
+import { Virtuoso } from "react-virtuoso";
 
 
 function ChatWindow ({ user }) {
@@ -20,7 +21,7 @@ function ChatWindow ({ user }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const messageEndRef = useRef(null);
-  
+
   const chatRef = useRef(chat);
 
   useEffect(() => {
@@ -79,6 +80,7 @@ function ChatWindow ({ user }) {
 
 
     const handleNewMessage = (newMessage) => {
+      console.log("Stigla nova poruka preko socketa:", newMessage);
       const incomingChatId = typeof newMessage.chat === 'object' 
           ? newMessage.chat._id 
           : newMessage.chat;
@@ -89,7 +91,7 @@ function ChatWindow ({ user }) {
           
             const exists = prev.some(m => m._id === newMessage._id);
             if (exists) return prev;
-
+            console.log("Ažuriram messages state sa novom porukom");
             return [...prev, newMessage];
           });
         }
@@ -174,7 +176,7 @@ function ChatWindow ({ user }) {
   socket.on("group updated", handler);
 
   return () => socket.off("group updated", handler);
-}, []);
+}, [chat?._id]);
 
 useEffect(() => {
   socket.on("removed from group", ({ chatId }) => {
@@ -188,9 +190,11 @@ useEffect(() => {
   return () => socket.off("removed from group");
 }, [chat]);
 
+
 useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
 }, [messages, isTyping]);
+
 
 
   if (!user) return <div>Loading user...</div>;
@@ -275,7 +279,7 @@ console.log(chat);
             </div>
 
             {chat.users.map((member) => (
-              <div key={member} className="friend_gropu_item">
+              <div key={member._id} className="friend_gropu_item">
                 <div className="info_cart">
              <img 
               src={member.profile?.image || "/default-avatar.png"}
@@ -307,13 +311,31 @@ console.log(chat);
               </div>
           </div>    
         )}
-
+   
+  {/*
     <div className="message_div">
         {Array.isArray(messages) && messages.map(m => (
             <MessageBubble key={m._id} message={m} user={user}/>
         ))}
         <div ref={messageEndRef} />
     </div>
+    */}
+
+    
+  <div style={{ flex: 1 }} className="message_div">
+    <Virtuoso
+        data={messages}
+        followOutput={(isAtBottom) => (isAtBottom ? "auto" : false)}
+        initialTopMostItemIndex={messages.length - 1}
+        itemContent={(index, message) => (
+          <div key={message._id || index} style={{ padding: '5px 0', display: 'flex', justifyContent: 'center' }}>
+          <MessageBubble message={message} user={user} />
+          </div>
+        )}
+      />
+  </div>
+
+    
 
     
      {isTyping && <p>{isGroup ? "Someone is typing..." : `${friend?.username} is typing...`}</p>}

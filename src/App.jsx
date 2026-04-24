@@ -76,11 +76,17 @@ useEffect(() => {
   if (!user?._id) return;
    const setup = () => {
     socket.emit("setup", user._id);
+  
   };
 
   if (!socket.connected) socket.connect();
 
-  socket.on("connect", setup);
+ // socket.on("connect", setup);
+
+  socket.on("connect", () => {
+    console.log("SOCKET CONNECTED:", socket.id);
+    socket.emit("setup", user._id);
+  });
 
  
   socket.on("friend request:new", (data) => {
@@ -234,7 +240,7 @@ useEffect(() => {
            />
           
            <Route path="/chat/:id" element={<ChatWindow key={user?._id} user={user}/>}/>
-           <Route path='/groups' element={<GroupsPage />}/>
+           <Route path='/groups' element={<GroupsPage user={user}/>} />
            <Route path='/setings' element={<Setings changeTheme={changeTheme}/>}/>
            
            </Routes>

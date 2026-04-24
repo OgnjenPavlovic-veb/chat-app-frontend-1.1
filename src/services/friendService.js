@@ -3,7 +3,6 @@ import API from "./api.js";
 
 export const sendFriendRequest = async (receiverId) => {
     
-
     try {
         const res = await API.post(`/friends/request`, { receiverId });
         return res.data;

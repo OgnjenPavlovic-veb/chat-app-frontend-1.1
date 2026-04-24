@@ -13,11 +13,20 @@ function MessageInput ({ chatId, addMessage }) {
 
        if(!text.trim() && images.length === 0) return;
       try {
+        console.log("Slanje poruke za chat:", chatId);
+        console.log("Tekst:", text);
+        console.log("Slike:", images);
         const message = await sendMessage({
             chatId,
             text,
             images
         });
+
+        console.log("Odgovor od servera (poruka):", message);
+        if (!message) {
+            console.error("Server je vratio prazan odgovor!");
+            return;
+        }
     
         addMessage(message);
         socket.emit("new message", {

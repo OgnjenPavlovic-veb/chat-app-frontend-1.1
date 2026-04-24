@@ -1,4 +1,4 @@
-
+import React from 'react';
 
 function MessageBubble ({ message, user }) {
     
@@ -44,4 +44,4 @@ function MessageBubble ({ message, user }) {
     )
 }
 
-export default MessageBubble;
+export default React.memo(MessageBubble);
