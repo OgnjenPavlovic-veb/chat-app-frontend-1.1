@@ -9,10 +9,16 @@ export const accessChat = async (userId) => {
     return res.data;
 }
 //-----------------------------------------------------
-export const getMessages = async (chatId) => {
+export const getMessages = async (chatId, before = null, limit = 20) => {
+    let url = `/message/${chatId}?limit=${limit}`;
 
-    const res = await API.get(`/message/${chatId}`);
+    if (before) {
+        url += `&before=${before}`;
+    }
+
+    const res = await API.get(url);
     return res.data;
+
 }
 //-----------------------------------------------------
 export const sendMessage = async ({ chatId, text, images }) => {

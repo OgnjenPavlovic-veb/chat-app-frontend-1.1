@@ -23,11 +23,11 @@ function Login ({ onLogin }) {
         if (e) e.preventDefault();
         
         if (!regUsername || !regEmail || !regPassword || !regPasswordConfirm) {
-            return console.log("All fields are required..");
+            return setError("All fields are required..");
         }
 
         if (regPassword !== regPasswordConfirm) {
-           return console.log("Passwords do not match.");
+           return setError("Passwords do not match.");
         }
     
      try {
@@ -102,22 +102,22 @@ const handleLogin = async () => {
                     {error && <p style={{ color: 'red', textAlign: "center"}}>{error}</p>}
                     <form className="Login_from" onSubmit={(e) => {e.preventDefault(); handleLogin();}}>
 
-                        <label>Email Or Username
+                        <label>Email or Username
                             <input 
                             type="text" placeholder="Email Or Username"
-                            maxLength={20} value={emailOrUsername} onChange={(e) => setEmailOrUsername(e.target.value)}
+                            maxLength={25} value={emailOrUsername} onChange={(e) => setEmailOrUsername(e.target.value)}
                             />
                         </label>
 
                         <label>Password
                             <input 
                             type="password" placeholder="**********"
-                            maxLength={20} value={password} onChange={(e) => setPassword(e.target.value)}
+                            maxLength={25} value={password} onChange={(e) => setPassword(e.target.value)}
                             />
                         </label>
 
                         <div className="login_btns_div">
-                            <button type="submit">Login</button>
+                            <button type="submit">Log In</button>
                             <button 
                             type="button"
                             onClick={() => {setShowRegister(true); setError("")}}
@@ -136,7 +136,7 @@ const handleLogin = async () => {
 
                   <label>Username
                     <input 
-                    type="text" placeholder="Username" maxLength={20}
+                    type="text" placeholder="Username" maxLength={25}
                     value={regUsername} onChange={(e) => setRegUsername(e.target.value)}
                     />
                     </label>
@@ -150,14 +150,14 @@ const handleLogin = async () => {
 
                   <label>Password
                     <input 
-                    type="password" placeholder="**********" maxLength={20}
+                    type="password" placeholder="**********" maxLength={25}
                     value={regPassword} onChange={(e) => setRegPassword(e.target.value)}
                     />
                     </label>
 
                    <label>PasswordConfirm
                     <input 
-                    type="password" placeholder="**********" maxLength={20}
+                    type="password" placeholder="**********" maxLength={25}
                     value={regPasswordConfirm} onChange={(e) => setRegPasswordConfirm(e.target.value)}
                     />
                     </label>

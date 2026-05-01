@@ -1,5 +1,5 @@
 import "./accaunt.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api.js";
 
@@ -11,6 +11,7 @@ function Accaunt ({ user, setUser }) {
     const [newPassword, setNewPassword] = useState("");
     const [image, setImage] = useState(null);
     const [openWindow, setOpenWindow] = useState(false);
+    const ImagesChange = useRef(null);
 
 
     const handleUpdate = async (e) => {
@@ -22,35 +23,32 @@ function Accaunt ({ user, setUser }) {
                 newPassword
         });
 
-            setUser(res.data);
-            alert("Accaunt updated.");
+        let updatedUser = res.data;
+
+        if (image) {
+            const formData = new FormData();
+            formData.append("image", image);
+            
+            const resImage = await API.put(`/accaunt/profile-image`, formData);
+            
+           
+            updatedUser = {
+                ...updatedUser,
+                profile: { ...updatedUser.profile, image: resImage.data.image }
+            };
+        }
+
+       
+        setUser(updatedUser);
+        alert("Account and profile image updated successfully!");
+
+        setOldPassword("");
+        setNewPassword("");
+        setImage(null)
         
       } catch (err) {
         alert(err.response?.data?.message || "Error updating account");
       }
-    }
-
-    const handleImage = async () => {
-        console.log("SELECTED IMAGE:", image);
-    
-        if (!image) {
-            alert("No image selected");
-            return;
-        }
- 
-        const formData = new FormData();
-        formData.append("image", image);
-      try {
-        const res = await API.put(`/accaunt/profile-image`, formData);
-
-            setUser(prev => ({
-                ...prev, 
-                profile: { ...prev.profile, image: res.data.image }
-            }))
-       alert("Image uploaded!");
-        } catch (err) {
-            alert(err.response?.data?.message || "Error uploading image");
-        }
     }
 
     const handleDelete = async () => {
@@ -69,12 +67,16 @@ function Accaunt ({ user, setUser }) {
       }
     }
 
+    const handleImageChange = () => {
+        ImagesChange.current.click();
+    }
+
 
     return (
         <>
         <div className="accaunt_div">
              
-           <h1>Accaunt Setings</h1>
+           <h1>Accaunt Settings</h1>
            <h2>{user.username}</h2>
          
          <form onSubmit={handleUpdate} className="acc_form">
@@ -82,31 +84,32 @@ function Accaunt ({ user, setUser }) {
          <div className="accaunt_image_div_setings">
             {user.profile?.image && (
             <img 
-            src={user.profile.image}
+            src={image ? URL.createObjectURL(image) : user.profile?.image}
             alt="profile"
             />
             )}
          </div>
-
-         <label htmlFor="fileInput">Change Image</label>
-            <input 
-            id="fileInput"
+         
+         
+         <label>Change Image</label>
+            <input
+            ref={ImagesChange} 
             type="file"
             onChange={(e) => setImage(e.target.files[0])}
             hidden
             />
         
-
-         <button type="button" onClick={handleImage}>Upload Image</button>
+         <button type="button" onClick={handleImageChange}>Upload Image</button>
          </div>
 
         <div className="accaunt_from2">
 
-            <label>Change Username
+            <label>Change Username ({username.length}/25)
                 <input 
                 type="text"
                 placeholder="New Username"
                 value={username}
+                maxLength={25}
                 onChange={(e) => setUsername(e.target.value)}
                 />
             </label>

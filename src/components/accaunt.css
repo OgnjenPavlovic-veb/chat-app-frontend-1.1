@@ -13,6 +13,7 @@
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
+  align-items: center;
   flex: 1;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -35,8 +36,13 @@
 .acc_form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 30px;
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .accaunt_image_div_setings {
@@ -59,9 +65,10 @@
 }
 
 .accaunt_from1 {
-  display: grid;
-  justify-content: center;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .accaunt_from1 label {
@@ -86,46 +93,78 @@
   padding: 10px;
   border-radius: 1000px;
   transition: 0.3s;
+  width: clamp(300px, 6vw, 650px);
 }
 
 .accaunt_from1 button:hover,
 .accaunt_btns button:hover {
   background-color: var(--acc-btnHover);
+  transform: translateY(-2px);
 }
 
 .accaunt_from2 {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  gap: 20px;
   width: 100%;
-  padding: 10px max(2%, 20%);
+  padding: 10px max(2%, 5%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .accaunt_from2 input {
   width: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: clamp(0.85rem, 6vw, 1.3rem);
-  padding: 3px 3%;
+  padding: 12px 20px;
   border-radius: 1000px;
-  margin: 4px;
-  display: flex;
-  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to bottom right, var(--acc-linearInput1), var(--acc-linearInput2));
   color: white;
-  background-image: linear-gradient(to bottom right, var(--acc-linearInput1), var(--acc-linearInput2));
+  font-size: 1rem;
+  transition: border 0.3s;
   border: none;
+}
+
+.accaunt_from2 input:focus {
+  outline: none;
+  border: 1px solid var(--acc-btnBack);
 }
 
 .accaunt_from2 label {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: clamp(1rem, 6vw, 1.7rem);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--label-color);
 }
 
 .accaunt_btns {
-  margin: 20px 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.accaunt_btns button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.accaunt_btns button[type="submit"] {
+  background-color: var(--acc-btnBack);
+  color: white;
+}
+
+.accaunt_btns button[type="button"] {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .accaunt_btns button {
@@ -141,32 +180,50 @@
   transition: 0.3s;
 }
 
+.window_delete {
+  margin-top: 40px;
+  background: var(--acc-btnBack);
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.7;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+}
+
+.window_delete:hover {
+  opacity: 1;
+}
+
+
 .window_delete_div {
-  position: fixed;
-  margin: auto;
-  inset: 0;
-  height: min-content;   
-  max-height: 90vh;         
-  width: clamp(300px, 700px, 90%);
-  padding: 20px;         
   background-color: var(--delete-accauntBack);
-  border-radius: 25px;
-  border: 7px solid var(--delete-accauntBorder);
-  box-sizing: border-box;
+  border: 1px solid var(--delete-accauntBorder);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 400px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+
+}
+
+.delete_btns_div {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  text-align: center;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: space-between;
 }
 
 .window_delete_div p {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  width: 100%;
+  font-size: 1rem;
   text-align: center;
-  margin-top: 20px;
-  font-size: clamp(1.2rem, 7vw, 2.1rem);
+}
+
+.delete_btn {
+  background-color: var(--acc-btnBack) !important;
+  flex: 1;
 }
 
 .overlay2 {
@@ -185,18 +242,24 @@
   z-index: 999;
 }
 
-.delete_btns_div {
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
-.window_delete {
-  position: relative;
-  margin-bottom: 40px;
-}
+@media (max-width: 600px) {
+  .acc_form {
+    padding: 20px;
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+  }
+  
+  .accaunt_image_div_setings {
+    width: 240px;
+    height: 240px;
+  }
 
+  .accaunt_btns {
+    flex-direction: column;
+  }
+}
 
 
 
@@ -393,7 +456,12 @@
 
 .group_item p {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: clamp(1.1rem, 7vw, 1.8rem);
+  font-size: clamp(0.9rem, 4vw, 1.7rem);
+  white-space: nowrap;      
+  overflow: hidden;        
+  text-overflow: ellipsis;  
+  flex: 1;                  
+  min-width: 0;
 }
 
 

@@ -1,30 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { sendMessage } from "../services/chatService";
 import { socket } from "../socket";
 import { useRef } from "react";
+import API from '../services/api';
 
-function MessageInput ({ chatId, addMessage }) {
+function MessageInput ({ chatId, addMessage, editingMessage, cancelEdit, updateMessageLocal }) {
     const [text, setText] = useState("");
     const [typing, setTyping] = useState(false);
     const [images, setImages] = useState([]);
     const fileInputRef = useRef();
 
+    useEffect(() => {
+        if (editingMessage) {
+            setText(editingMessage.text);
+        } else {
+            setText("");
+        }
+    }, [editingMessage]);
+
+
     const handleSend = async () => {
 
        if(!text.trim() && images.length === 0) return;
       try {
-        console.log("Slanje poruke za chat:", chatId);
-        console.log("Tekst:", text);
-        console.log("Slike:", images);
+       if (editingMessage) {
+           const res = await API.put(`/message/editMessage/${editingMessage._id}`, { text });
+           socket.emit("message updated", res.data);
+           if (updateMessageLocal) {
+             updateMessageLocal(res.data);
+            }
+           cancelEdit(); 
+       } else {
+
         const message = await sendMessage({
             chatId,
             text,
             images
         });
 
-        console.log("Odgovor od servera (poruka):", message);
         if (!message) {
-            console.error("Server je vratio prazan odgovor!");
+            console.error("The server returned an empty response!");
             return;
         }
     
@@ -37,8 +52,10 @@ function MessageInput ({ chatId, addMessage }) {
         setText("");
         setImages([])
         if (fileInputRef.current) fileInputRef.current.value = "";
+
+        } 
       } catch (err) {
-        console.error("Failed to send message:", err);
+        console.error("Failed to send/edit message:", err);
       }
     }
 
@@ -79,6 +96,15 @@ function MessageInput ({ chatId, addMessage }) {
 
     return (
         <>
+        <div className="message_input_container">
+        
+          {editingMessage && (
+            <div className="editing_bar">
+                <span>Editing message...</span>
+                <button className="cancel_edit_btn" onClick={cancelEdit}>✖</button>
+            </div>
+          )}
+
         <div className="message_input"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -87,6 +113,8 @@ function MessageInput ({ chatId, addMessage }) {
             <input 
             value={text}
             onChange={handleTyping}
+            placeholder={editingMessage ? "Edit your message..." : "Type a message..."}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
 
             {images.length > 0 && (
@@ -94,7 +122,7 @@ function MessageInput ({ chatId, addMessage }) {
                     {images.map((img, i) => (
                         <div key={i} className="preview_item">
                             <img src={URL.createObjectURL(img)}/>
-                            <button onClick={() => removeImage(i)}>X</button>
+                            <button onClick={() => removeImage(i)}>✖</button>
                         </div>
                     ))}
                 </div>
@@ -121,9 +149,9 @@ function MessageInput ({ chatId, addMessage }) {
                 }}
             />
 
-            <button onClick={handleSend}>Send</button>
+            <button onClick={handleSend}>{editingMessage ? "Save" : "Send"}</button>
         </div>
-        
+         </div>
         </>
     )
 }

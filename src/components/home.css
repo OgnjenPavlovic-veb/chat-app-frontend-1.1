@@ -94,3 +94,9 @@
   background-color: var(--search-resultBack);
   padding: 20px;
 }
+
+.loading-spinner {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  text-align: center;
+}

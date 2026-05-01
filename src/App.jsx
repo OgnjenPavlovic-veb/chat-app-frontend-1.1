@@ -207,7 +207,7 @@ useEffect(() => {
             <button onClick={() => setIsOpen(false)}>Friends</button>
             </Link> 
             <Link to={"/groups"}>
-            <button onClick={() => setIsOpen(false)}>Grups</button>
+            <button onClick={() => setIsOpen(false)}>Groups</button>
             </Link> 
             <Link to={"/requests"}>
              <button onClick={() => setIsOpen(false)}>Requests</button>
@@ -215,7 +215,7 @@ useEffect(() => {
             </div>
 
            <Link to={"/setings"}>
-             <button onClick={() => setIsOpen(false)}>Setings</button>
+             <button onClick={() => setIsOpen(false)}>Settings</button>
             </Link>  
            
             
@@ -251,7 +251,7 @@ useEffect(() => {
 
         
         </footer>
-       
+    
         </div>
         </>
       )}

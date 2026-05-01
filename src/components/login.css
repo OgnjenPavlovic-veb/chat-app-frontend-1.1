@@ -4,213 +4,152 @@
     box-sizing: border-box;
 }
 
-
-
-
-.login_container {
-    display: block;
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: clamp(300px, 700px, 90%);
-    height: clamp(300px, 500px, 90%);
-    border-radius: 50px;
-    padding: 1em 2em;
-    background: rgba(253, 253, 253, 0.136);
-    backdrop-filter: blur(8px);
-    border: 5px solid transparent;
-    background-clip: padding-box;
-    background-image: 
-        linear-gradient(rgba(1, 1, 19, 0.701), rgba(1, 1, 19, 0.701)),
-        linear-gradient(to bottom right, rgb(0, 242, 255), rgb(11, 2, 131));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-}
-
-.register_container {
-    display: block;
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: clamp(300px, 700px, 90%);
-    height: clamp(300px, 700px, 90%);
-    border-radius: 50px;
-    padding: 1em 2em;
-    background: rgba(253, 253, 253, 0.136);
-    backdrop-filter: blur(8px);
-    border: 5px solid transparent;
-    background-clip: padding-box;
-    background-image: 
-        linear-gradient(rgba(1, 1, 19, 0.701), rgba(1, 1, 19, 0.701)),
-        linear-gradient(to bottom right, rgb(0, 242, 255), rgb(11, 2, 131));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-}
-
-.login_container h1,
-.register_container h1 {
-    text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    top: 0;
-    width: 100%;
-    font-size: 3rem;
-    margin-top: 30px;
-    margin: 0;
-    color: transparent;
-    background-image: linear-gradient(to right,rgb(0, 242, 255), rgb(11, 2, 131));
-    background-clip: text;
-    z-index: 2;
-}
-
-.Login_from,
-.register_from {
+.login_container, .register_container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 10px 10%;
-    align-items: center;
-}
-.Login_from label,
-.register_from label{
-   width: 100%;
-   font-size: 2rem;
-   color: transparent;
-   background-image: linear-gradient(to right, rgb(0, 242, 255), rgb(2, 75, 131));
-   background-clip: text;
-   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px auto;
+    width: 95%;
+    max-width: 500px;
+    min-height: auto;
+    height: max-content; 
+    border-radius: 24px;
+    padding: 2.5rem 1.5rem;
+    background: rgba(1, 1, 19, 0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 242, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    inset: 0;
+    margin: auto;
 }
 
-.Login_from input,
-.register_from input {
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login_container h1, .register_container h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background: linear-gradient(to right, #00f2ff, #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.Login_from, .register_from {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; 
     width: 100%;
-    font-size: clamp(1.4rem, 6vw, 2.4rem);
-    padding: 4px 20px;
-    border-radius: 70px;
-    border: 3px solid rgb(2, 75, 131);
-    background-image: linear-gradient(to right, rgb(0, 242, 255), rgb(11, 2, 131));
-    margin-top: 5px;
-    margin-bottom: 10px;
-    text-overflow: ellipsis;
+}
+
+.Login_from label, .register_from label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #00f2ff;
+    font-weight: 600;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.Login_from input, .register_from input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px 20px;
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.Login_from input:focus, .register_from input:focus {
+    outline: none;
+    border-color: #00f2ff;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+}
+
+.login_container p, .register_container p {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
 }
 
 .login_btns_div {
-    display: flex;
-    justify-content: space-between;
+    display: grid; 
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.login_btns_div button, .register_btn {
     width: 100%;
-    padding: 40px 10%;
-    margin-bottom: 10%;
-}
-
-@media (max-width: 800px) {
-    .login_btns_div {
-        padding: 40px 0;
-    }
-}
-
-.login_btns_div button {
-    position: relative;
-    text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    width: 140px;
-    font-size: 1.8rem;
-    border-radius: 1000px;
-    background-color: transparent;
-    color: rgb(0, 242, 255);
-    border: 2px solid rgb(0, 242, 255);
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
     transition: 0.3s;
-    transition: transform 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.login_btns_div button::after {
-    content: "";
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background-image: linear-gradient(to bottom right, rgb(0, 242, 255), rgb(11, 2, 131));
-    border-radius: 1000px;
-    padding: 2px;
-    z-index: -1;
-    opacity: 0.4;
-    transition: opacity 0.3s;
-}
-
-.login_btns_div button:hover::after {
-    opacity: 1;
-}
-
-.login_btns_div button:hover {
-   transform: scale(1.05);
-   opacity: 1;
-   color: rgb(11, 2, 131);
+    border: none;
 }
 
 
-/*-------------------------------------------------------------------*/
-
-
-.register_btn {
-    position: relative;
-    text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    width: 190px;
-    font-size: 1.8rem;
-    border-radius: 1000px;
-    background-color: transparent;
-    color: rgb(0, 242, 255);
-    border: 2px solid rgb(0, 242, 255);
-    transition: 0.3s;
-    transition: transform 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px;
+button[type="submit"], .register_btn {
+    background: linear-gradient(135deg, #00f2ff, #0077ff);
+    color: #010113;
 }
 
-.register_btn::after {
-    content: "";
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background-image: linear-gradient(to bottom right,  rgb(0, 242, 255), rgb(11, 2, 131));
-    border-radius: 1000px;
-    z-index: -1;
-    opacity: 0.4;
-    transition: opacity 0.3s;
+
+button[type="button"]:not(.x_btn) {
+    background: transparent;
+    color: #00f2ff;
+    border: 1px solid #00f2ff;
 }
 
-.register_btn::after:hover {
-   opacity: 1;
-}
-
-.register_btn:hover {
-    transform: scale(1.05);
-    opacity: 1;
-    color: rgb(11, 2, 131);
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
 .x_btn {
     position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 25px;
-    right: 25px;
-    font-weight: bold;
-    border: 2px solid rgb(0, 242, 255);
-    color: rgb(0, 242, 255);
-    background-color: transparent;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
-    transition: 0.3s;
+    cursor: pointer;
 }
 
-.x_btn:hover {
-    background-color: rgb(11, 2, 131);
+
+@media (max-width: 480px) {
+    .login_container, .register_container {
+        padding: 2rem 1rem;
+    }
+    
+    .login_btns_div {
+        grid-template-columns: 1fr; 
+    }
+    
+    .login_container h1 {
+        font-size: 1.8rem;
+    }
 }

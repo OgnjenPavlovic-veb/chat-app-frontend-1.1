@@ -25,8 +25,7 @@ function GroupsPage () {
         }
         
     };
-
-    loadGroups();
+     loadGroups();
 
     useEffect(() => {
      const handler = () => {
@@ -82,10 +81,11 @@ function GroupsPage () {
 
            <div className="create_div">
 
-            <label>Group Name
+            <label>Group Name ({name.length}/25)
             <input 
             placeholder="Create Group"
             value={name}
+            maxLength={25}
             onChange={(e) => setName(e.target.value)}
             />
             </label>
