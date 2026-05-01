@@ -102,23 +102,22 @@
     border-radius: 12px;
     cursor: pointer;
     transition: 0.3s;
-    border: none;
 }
 
 
-button[type="submit"], .register_btn {
+ .register_btn, .login_btn {
     background: linear-gradient(135deg, #00f2ff, #0077ff);
     color: #010113;
 }
 
-
-button[type="button"]:not(.x_btn) {
-    background: transparent;
+.register_btn1 {
     color: #00f2ff;
+    background-color: transparent;
     border: 1px solid #00f2ff;
 }
 
-button:hover {
+
+.btn222:hover {
     transform: translateY(-2px);
     filter: brightness(1.1);
 }

@@ -117,8 +117,8 @@ const handleLogin = async () => {
                         </label>
 
                         <div className="login_btns_div">
-                            <button type="submit">Log In</button>
-                            <button 
+                            <button className="login_btn btn222" type="submit">Log In</button>
+                            <button className="btn222 register_btn1"
                             type="button"
                             onClick={() => {setShowRegister(true); setError("")}}
                             >Register</button>
@@ -162,7 +162,7 @@ const handleLogin = async () => {
                     />
                     </label>
 
-                    <button type="submit" className="register_btn">Register</button>        
+                    <button type="submit" className="register_btn btn222">Register</button>        
                  </form>    
 
             </div>)}
